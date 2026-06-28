@@ -1,0 +1,75 @@
+{% # theme-check-disable %}
+{%- unless settings.type_body_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_body_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{%- unless settings.type_subheading_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_subheading_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{%- unless settings.type_heading_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_heading_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{%- unless settings.type_accent_font.system? -%}
+  <link
+    rel="preload"
+    as="font"
+    href="{{ settings.type_accent_font | font_url }}"
+    type="font/woff2"
+    crossorigin
+    fetchpriority="low"
+  >
+{%- endunless -%}
+{% # theme-check-enable %}
+
+<style>
+  @font-face {
+      font-family: 'Ziener Helvetica';
+      src: url(https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ZienerHelvetica-Regular_0.otf?v=1780767009);
+      font-weight: 400;
+      font-display: fallback;
+    }
+    @font-face {
+      font-family: 'Ziener Helvetica';
+      src: url(https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ZienerEurostileMediumExtend.otf?v=1780767009);
+      font-weight: 500;
+      font-display: fallback;
+    }
+    @font-face {
+      font-family: 'Ziener Helvetica';
+      src: url(https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ZienerHelvetica-Black_0.otf?v=1780767008);
+      font-weight: 900;
+      font-display: fallback;
+    }
+    @font-face {
+      font-family: 'Ziener Helvetica';
+      src: url(https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ZienerHelvetica-Bold_0.otf?v=1780767009);
+      font-weight: 700;
+      font-display: fallback;
+    }
+    @font-face {
+      font-family: 'Ziener Helvetica';
+      src: url(https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ZienerHelvetica-Light_0.otf?v=1780767009);
+      font-weight: 300;
+      font-display: fallback;
+    }
+</style>

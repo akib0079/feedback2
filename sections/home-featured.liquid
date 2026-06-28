@@ -1,0 +1,210 @@
+<div 
+    class="section section--full-width-margin section--page-width color-{{ section.settings.color_scheme }} container-{{ section.settings.container_type }}"
+    style="--container-width: {{  section.settings.container_width }}px;--height: {{  section.settings.height }};--height-mobile: {{  section.settings.height_mobile }};"
+>
+    <div class="home-featured__grid bg-img-holder">
+      <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+  <div class="home-featured__left bg-img-holder">
+    {% if section.settings.image != blank %}
+        {{
+        section.settings.image
+        | image_url: width: null
+        | image_tag: class: 'home-featured__image bg-img hidden--mobile'
+        }}
+        {{
+        section.settings.image_mobile
+        | default: section.settings.image
+        | image_url: width: null
+        | image_tag: class: 'home-featured__image bg-img mobile-only  hidden--desktop'
+        }}
+    {% else %}
+        {{ 'collection-1' | placeholder_svg_tag: 'home-featured__image bg-img placeholder' }}
+    {% endif %}
+  </div>
+    <div class="home-featured__right">
+        {% if section.settings.title != blank %}
+          <h2 class="home-featured__title">{{ section.settings.title }}</h2>
+        {% endif %}
+        {% if section.settings.desc != blank %}
+          <div class="home-featured__desc">{{ section.settings.desc }}</div>
+        {% endif %}
+        {% if section.settings.btn_text != blank %}
+            {% assign class = 'home-featured__button ' | append: section.settings.style_class %}
+            {% render 'button-global', label: section.settings.btn_text, url: section.settings.btn_url, class: class %}
+        {% endif %}
+    </div>
+  </div>
+</div>
+{% stylesheet %}
+    .section.section--page-width.container-full{
+        grid-template-columns: 0 100% 0;
+    }
+    .section.section--page-width.container-custom{
+        --page-width: var(--container-width);
+    }
+    .home-featured__grid{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: var(--height);
+        @media screen and (max-width: 749px) {
+            grid-template-columns: 100%;
+            min-height: auto;
+        }
+    }
+    .home-featured__left{
+        @media screen and (max-width: 749px) {
+            min-height: var(--height-mobile);
+        }
+    }
+    .home-featured__right{
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        @media screen and (max-width: 749px) {
+            padding: 80px 30px;
+        }
+    }
+    .home-featured__image.placeholder{
+        background: #EEE;
+    }
+    .home-featured__title{
+        margin: 0;
+        font-weight: 700;
+    }
+    .home-featured__desc{
+        font-size: 16px;
+        line-height: 150%;
+        margin-top: 28px;
+        @media screen and (max-width: 749px) {
+            font-size: 14px;
+        }
+    }
+    .home-featured__button{
+        margin-top: 24px;
+    }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Home Featured",
+  "class": "section-home-featured",
+  "disabled_on": {
+    "templates": ["password"],
+    "groups": ["aside"]
+  },
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Unique gloves from Oberammergau"
+    },
+    {
+        "type": "richtext",
+        "id": "desc",
+        "label": "Description",
+        "default": "<p>Our gloves made with Econyl® yarn meet the highest comfort standards</p>"
+    },
+    {
+        "type": "text",
+        "id": "btn_text",
+        "label": "Button text",
+        "default": "Discover now"
+    },
+    {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Button url",
+        "default": "/collections/all"
+    },
+    {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+    },
+    {
+        "type": "image_picker",
+        "id": "image_mobile",
+        "label": "Mobile image"
+    },
+    {
+        "type": "header",
+        "content": "Appearance"
+    },
+    {
+        "type": "select",
+        "id": "style_class",
+        "label": "t:settings.style",
+        "options": [
+            {
+            "value": "button",
+            "label": "t:options.primary"
+            },
+            {
+            "value": "button-secondary",
+            "label": "t:options.secondary"
+            },
+            {
+            "value": "link",
+            "label": "t:options.link"
+            }
+        ],
+        "default": "button"
+    },
+    {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "default": "scheme-3",
+        "label": "t:settings.color_scheme"
+    },
+    {
+        "type": "text",
+        "id": "height",
+        "label": "Height Desktop",
+        "default": "800px"
+    },
+    {
+        "type": "text",
+        "id": "height_mobile",
+        "label": "Image Height mobile",
+        "default": "471px"
+    },
+    {
+        "type": "select",
+        "id": "container_type",
+        "label": "Container",
+        "options": [
+            {
+            "value": "theme",
+            "label": "Theme"
+            },
+            {
+            "value": "full",
+            "label": "Full"
+            },
+            {
+            "value": "custom",
+            "label": "Custom"
+            },
+        ],
+        "default": "theme"
+    },
+    {
+        "type": "range",
+        "id": "container_width",
+        "label": "Container width",
+        "min": 1000,
+        "max": 2000,
+        "step": 10,
+        "default": 1440,
+        "unit": "px",
+        "visible_if": "{{ section.settings.container_type == 'custom' }}"
+    },
+  ],
+  "presets": [
+    {
+      "name": "Home Featured",
+    }
+  ]
+}
+{% endschema %}

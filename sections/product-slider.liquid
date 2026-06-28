@@ -1,0 +1,165 @@
+<div class="section products-slider-section section-id-{{ section.id }}">
+  <div class="product-slider__nav-row">
+    {% if section.settings.title != blank %}
+      <h3 class="products-slider__title">{{ section.settings.title }}</h3>
+    {% endif %}
+    <div class="products-slider__nav-right-col">
+        {% render 'slider-nav' %}
+    </div>
+    {%- if section.settings.btn_text != blank -%}
+      <a
+        class="products-slider__btn underlined-btn underlined-btn-hover hidden--mobile"
+        href="{{ section.settings.btn_url }}"
+      >
+        <span>{{ section.settings.btn_text }}</span>
+      </a>
+    {%- endif -%}
+  </div>
+  <div class="products-slider__swiper swiper">
+    <div class="swiper-wrapper" data-animate="fade-up" data-animate-stagger="0.15">
+      {%- if section.settings.products != blank -%}
+        {% for product in section.settings.products %}
+          {%- if product.price > 0 -%}
+            <div class="swiper-slide">
+              <div class="products-slider__block">
+                {% render 'product-card-alt', product: product %}
+              </div>
+            </div>
+          {%- endif -%}
+        {% endfor %}
+      {%- else -%}
+        {% for i in (1..12) %}
+          <div class="swiper-slide">
+            <a class="link-underline" href="#">
+              <div class="products-slider__block">
+                {% render 'product-placeholder-block', index: i %}
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      {%- endif -%}
+    </div>
+</div>
+{% render 'slider-nav-scrollbar' %}
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.section-id-{{ section.id }} .products-slider__swiper', {
+      slidesPerView: 'auto',
+      freeMode: {
+        enabled: true,
+        sticky: true,
+        momentumRatio: 0.8,
+      },
+    navigation: {
+        nextEl: '.section-id-{{ section.id }} .slider_nav.nav-next',
+        prevEl: '.section-id-{{ section.id }} .slider_nav.nav-prev',
+    },
+    scrollbar: {
+        el: '.section-id-{{ section.id }} .swiper-scrollbar',
+        draggable: true
+    },
+    });
+  });
+</script>
+{% stylesheet %}
+  .section-products-slider{
+    padding: 36px 0 54px;
+    overflow: hidden;
+    @media screen and (max-width: 749px) {
+        padding: 64px 0;
+    }
+  }
+  .product-slider__nav-row{
+    display: flex;
+    align-items: center;
+    grid-gap: 8px;
+    margin-bottom: 40px;
+    @media screen and (max-width: 749px) {
+      margin-bottom: 33px;
+    }
+  }
+  .section-products-slider .products-slider__title{
+  margin: 0;
+  line-height: 150%;
+  }
+.products-slider__nav-right-col{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  grid-gap: 35px;
+}
+.products-slider__nav-wrap.inactive{
+  display: none;
+}
+  .products-slider__swiper {
+  overflow: visible;
+  --gap: 16px;
+  margin: 0 calc(-1 * var(--gap) / 2);
+  user-select: none;
+  }
+  .products-slider__swiper .swiper-slide{
+    width: calc(var(--gap) + 364px) ;
+    @media screen and (max-width: 749px) {
+        width: calc(var(--gap) + 299px) ;
+    }
+  }
+  /* .products-slider__block:hover .product-card__alt_img{
+    transform: scale(1.05);
+  } */
+  .products-slider__block{
+    margin: 0 calc(var(--gap) / 2);
+  }
+  .section-products-slider .slider_controls-wrap{
+    margin-top: 52px;
+    @media screen and (max-width: 749px) {
+        margin-top: 32px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Products Slider",
+  "class": "section-products-slider",
+  "disabled_on": {
+    "templates": ["password"],
+    "groups": ["aside"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "NEW Arrivals"
+    },
+    {
+      "type": "richtext",
+      "id": "desc",
+      "label": "Description",
+      "default": "<p>30% Discount for black Friday valid till 30th November</p>"
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button URL",
+      "default": "/collections/all"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Product List"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Products Slider"
+    }
+  ]
+}
+{% endschema %}

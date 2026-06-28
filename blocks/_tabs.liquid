@@ -1,0 +1,64 @@
+{% liquid
+  capture tabs
+    content_for 'blocks' 
+  endcapture
+  assign tabs = tabs | split: '==========================================='
+  assign tab_heads = ''
+  assign tab_contents = ''
+  for content in tabs
+    if content contains 'tab-item__header'
+      assign tab_heads = tab_heads | append: content
+    elsif content contains 'tab-item__content'
+      assign tab_contents = tab_contents | append: content
+    endif
+  endfor
+%}
+<tabs-element {{ block.shopify_attributes }}>
+    <div class="tabs__headers">
+        {{tab_heads}}
+    </div>
+    <div class="tabs__contents">
+        {{tab_contents}}
+    </div>
+</tabs-element>
+{% stylesheet %}
+.tabs__headers{
+    display: flex;
+    grid-gap: 10px;
+    @media screen and (max-width: 749px) {
+      flex-direction: column;
+    }
+}
+.tabs__contents{
+  margin-top: 70px;
+}
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Tab",
+  "tag": null,
+  "class": "tab_element",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Label",
+        "default": "Product care"
+    }
+  ],
+  "blocks": [{"type": "_tab-item"}],
+  "presets": [
+    {
+      "name": "Tab",
+      "blocks": [
+        {
+            "type": "_tab-item"
+        },
+        {
+            "type": "_tab-item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

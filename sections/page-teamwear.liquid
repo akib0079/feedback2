@@ -1,0 +1,520 @@
+<div class="tw-page">
+  <!-- Banner -->
+  {% assign desktop_img_url = section.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/placeholder-banner.png' %}
+  {% assign mobile_img_url = section.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/placeholder-banner-mobile.png' %}
+
+  <div class="tw-banner">
+    <div class="tw-banner__image-wrapper">
+      {% if section.settings.image_desktop != blank %}
+        <img src="{{ section.settings.image_desktop | image_url: width: 2500 }}" alt="{{ section.settings.heading | escape }}" class="tw-banner__img tw-desktop-only" loading="eager">
+      {% else %}
+        <img src="{{ desktop_img_url }}" alt="{{ section.settings.heading | escape }}" class="tw-banner__img tw-desktop-only" loading="eager">
+      {% endif %}
+      
+      {% if section.settings.image_mobile != blank %}
+        <img src="{{ section.settings.image_mobile | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="tw-banner__img tw-mobile-only" loading="eager">
+      {% else %}
+        <img src="{{ mobile_img_url }}" alt="{{ section.settings.heading | escape }}" class="tw-banner__img tw-mobile-only" loading="eager">
+      {% endif %}
+    </div>
+    <div class="tw-banner__overlay"></div>
+    {% if section.settings.heading != blank %}
+      <div class="tw-banner__content tw-container">
+        <h1 class="tw-banner__heading">{{ section.settings.heading }}</h1>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Tabs Section -->
+  <div class="tw-tabs-section">
+    <div class="tw-container">
+      
+      <!-- Tab Headers -->
+      <div class="tw-tabs-nav">
+        {% assign tab_count = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'tab' %}
+            {% assign tab_count = tab_count | plus: 1 %}
+            <button class="tw-tab-btn {% if tab_count == 1 %}is-active{% endif %}" data-target="tab-{{ block.id }}" {{ block.shopify_attributes }}>
+              {{ block.settings.title }}
+            </button>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="tw-tabs-content-area">
+        {% assign tab_count = 0 %}
+        {% for block in section.blocks %}
+          {% if block.type == 'tab' %}
+            {% assign tab_count = tab_count | plus: 1 %}
+            
+            <div class="tw-tab-content {% if tab_count == 1 %}is-active{% endif %}" id="tab-{{ block.id }}">
+              
+              {% if block.settings.tab_content_type == 'color_overviews' %}
+                {% if block.settings.co_header != blank %}
+                  <h2 class="tw-co-header">{{ block.settings.co_header }}</h2>
+                {% endif %}
+                
+                <div class="tw-co-list">
+                  {% for img_block in section.blocks %}
+                    {% if img_block.type == 'color_image' %}
+                      <div class="tw-co-item" {{ img_block.shopify_attributes }}>
+                        {% if img_block.settings.title != blank %}
+                          <h3 class="tw-co-title">{{ img_block.settings.title }}</h3>
+                        {% endif %}
+                        
+                        {% if img_block.settings.link != blank %}<a href="{{ img_block.settings.link }}" target="_blank" class="tw-co-link">{% endif %}
+                        
+                        {% if img_block.settings.image != blank %}
+                          <img src="{{ img_block.settings.image | image_url: width: 1400 }}" alt="{{ img_block.settings.title | escape }}" loading="lazy" class="tw-co-img">
+                        {% elsif img_block.settings.default_img != blank %}
+                          <img src="{{ img_block.settings.default_img }}" alt="{{ img_block.settings.title | escape }}" loading="lazy" class="tw-co-img">
+                        {% endif %}
+
+                        {% if img_block.settings.link != blank %}</a>{% endif %}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                
+              {% elsif block.settings.tab_content_type == 'impregnation_service' %}
+                <div class="tw-imp-container">
+                  {% if block.settings.imp_title != blank %}
+                    <h2 class="tw-imp-title">{{ block.settings.imp_title }}</h2>
+                  {% endif %}
+                  {% if block.settings.imp_text != blank %}
+                    <div class="tw-imp-text">{{ block.settings.imp_text | newline_to_br }}</div>
+                  {% endif %}
+                  {% if block.settings.imp_subtitle != blank %}
+                    <h3 class="tw-imp-subtitle">{{ block.settings.imp_subtitle }}</h3>
+                  {% endif %}
+                  
+                  <div class="tw-imp-grid">
+                    {% for step_block in section.blocks %}
+                      {% if step_block.type == 'service_step' %}
+                        <div class="tw-imp-step" {{ step_block.shopify_attributes }}>
+                          <div class="tw-imp-step-icon">
+                            {% if step_block.settings.icon_img != blank %}
+                              <img src="{{ step_block.settings.icon_img | image_url: width: 100 }}" alt="{{ step_block.settings.title | escape }}" loading="lazy">
+                            {% elsif step_block.settings.icon_url != blank %}
+                              <img src="{{ step_block.settings.icon_url }}" alt="{{ step_block.settings.title | escape }}" loading="lazy">
+                            {% endif %}
+                          </div>
+                          <div class="tw-imp-step-content">
+                            <h4 class="tw-imp-step-title">{{ step_block.settings.title }}</h4>
+                            <div class="tw-imp-step-text">{{ step_block.settings.text }}</div>
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              
+              {% elsif block.settings.tab_content_type == 'repair_service' %}
+                <div class="tw-rep-container">
+                  {% if block.settings.rep_text != blank %}
+                    <div class="tw-rep-text">{{ block.settings.rep_text | newline_to_br }}</div>
+                  {% endif %}
+                </div>
+              
+              {% else %}
+                {% if block.settings.custom_html != blank %}
+                  {{ block.settings.custom_html }}
+                {% endif %}
+              {% endif %}
+              
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} .tw-banner {
+    min-height: {{ section.settings.banner_height_desktop }}px;
+  }
+  @media screen and (max-width: 990px) {
+    #shopify-section-{{ section.id }} .tw-banner {
+      min-height: {{ section.settings.banner_height_mobile }}px;
+    }
+  }
+</style>
+
+<style>
+/* Global */
+.tw-page { width: 100%; overflow-x: hidden; color: #000; padding-bottom: 100px; }
+.tw-container { max-width: 1440px; margin: 0 auto; padding: 0 8px; width: 100%; }
+.tw-desktop-only { display: block !important; }
+.tw-mobile-only { display: none !important; }
+
+@media screen and (max-width: 767px) {
+  .tw-container { padding: 0 20px; }
+  .tw-desktop-only { display: none !important; }
+  .tw-mobile-only { display: block !important; }
+}
+
+/* Banner */
+.tw-banner { position: relative; width: 100%; display: flex; align-items: flex-end; }
+.tw-banner__image-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.tw-banner__img { width: 100%; height: 100%; object-fit: cover; }
+.tw-banner__overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.35) 100%); z-index: 1; }
+.tw-banner__content { position: relative; z-index: 2; padding-bottom: 40px; }
+.tw-banner__heading { color: #FFF; font-family: "Ziener Helvetica", Arial, sans-serif; font-size: 80px; font-style: normal; font-weight: 700; line-height: 100px; margin: 0; }
+
+/* Tabs Section */
+.tw-tabs-section { padding-top: 60px; }
+.tw-tabs-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 50px; }
+.tw-tab-btn { display: flex; height: 50px; padding: 0 20px; justify-content: center; align-items: center; gap: 6px; flex: 1 0 0; background: rgba(249, 249, 249, 1); border: 1px solid transparent; cursor: pointer; transition: all 0.3s ease; color: #000; font-family: Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; line-height: 98%; letter-spacing: -0.28px; text-transform: capitalize; }
+.tw-tab-btn:hover { background: rgba(235, 235, 235, 1); border: 1px solid rgba(0, 0, 0, 1); }
+.tw-tab-btn.is-active { border: 1px solid rgba(0, 0, 0, 1); }
+
+.tw-tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
+.tw-tab-content.is-active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Color Overviews */
+.tw-co-header { color: #000; font-family: "Ziener Helvetica", Arial, sans-serif; font-size: 32px; font-style: normal; font-weight: 400; line-height: 48px; margin: 0 0 60px 0; }
+.tw-co-list { display: flex; flex-direction: column; gap: 80px; }
+.tw-co-item { width: 100%; }
+.tw-co-title { color: #000; text-align: left; font-family: "Ziener Helvetica", Arial, sans-serif; font-size: 22px; font-style: normal; font-weight: 700; line-height: 150%; margin: 0 0 30px 0; }
+.tw-co-link { display: block; text-decoration: none; }
+.tw-co-img { width: 100%; height: auto; display: block; }
+
+
+/* Impregnation Service */
+.tw-imp-container {
+  max-width: 100%;
+}
+.tw-imp-title {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%; /* 38.4px */
+  margin: 0 0 24px 0;
+  max-width: 800px;
+}
+.tw-imp-text {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
+  margin: 0 0 40px 0;
+}
+.tw-imp-subtitle {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 33px */
+  margin: 0 0 24px 0;
+}
+.tw-imp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.tw-imp-step {
+  display: flex;
+  height: 332px;
+  padding: 30px;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex: 1 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: #FFF;
+  transition: all 0.3s ease;
+}
+.tw-imp-step:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+.tw-imp-step-icon {
+  width: 40px;
+  height: 40px;
+}
+.tw-imp-step-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.tw-imp-step-content {
+  margin-top: 100px;
+}
+.tw-imp-step-title {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%; /* 24px */
+  margin: 0 0 12px 0;
+}
+.tw-imp-step-text {
+  color: #202020;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
+  margin: 0;
+}
+
+@media screen and (max-width: 990px) {
+  .tw-imp-title {
+    font-size: 28px;
+    line-height: 120%; /* 33.6px */
+  }
+  .tw-imp-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .tw-imp-step {
+    height: auto;
+    min-height: 250px;
+  }
+}
+
+
+/* Repair Service */
+.tw-rep-container {
+  max-width: 100%;
+}
+.tw-rep-text {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 21px */
+  margin: 0;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .tw-banner__heading { font-size: 48px; line-height: 100%; }
+  .tw-tabs-nav { flex-direction: column; gap: 10px; }
+  .tw-tab-btn { width: 100%; flex: none; }
+  .tw-co-header { font-size: 28px; line-height: 120%; margin-bottom: 40px; }
+  .tw-co-list { gap: 60px; }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const tabBtns = document.querySelectorAll('.tw-tab-btn');
+  const tabContents = document.querySelectorAll('.tw-tab-content');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      tabBtns.forEach(b => b.classList.remove('is-active'));
+      tabContents.forEach(c => c.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      const targetId = btn.getAttribute('data-target');
+      document.getElementById(targetId).classList.add('is-active');
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Teamwear Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Banner Heading",
+      "default": "Teamwear"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "image_desktop_url",
+      "label": "Fallback Desktop Image URL"
+    },
+    {
+      "type": "text",
+      "id": "image_mobile_url",
+      "label": "Fallback Mobile Image URL"
+    },
+    {
+      "type": "header",
+      "content": "Banner Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "banner_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 410
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "min": 150,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 290
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab Block",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Tab Name",
+          "default": "Tab Name"
+        },
+        {
+          "type": "select",
+          "id": "tab_content_type",
+          "label": "Tab Content Type",
+          "options": [
+            {
+              "value": "custom_html",
+              "label": "HTML Embed (PDF, etc)"
+            },
+            {
+              "value": "color_overviews",
+              "label": "Color Overviews Layout"
+            },
+            {
+              "value": "impregnation_service",
+              "label": "Impregnation Service Layout"
+            },
+            {
+              "value": "repair_service",
+              "label": "Repair Service Layout"
+            }
+          ],
+          "default": "custom_html"
+        },
+        {
+          "type": "html",
+          "id": "custom_html",
+          "label": "HTML Embed Content",
+          "info": "Only used if 'HTML Embed' is selected above."
+        },
+        {
+          "type": "text",
+          "id": "co_header",
+          "label": "Color Overviews Header",
+          "default": "Color overviews for the winter season 2026/27",
+          "info": "Only used if 'Color Overviews Layout' is selected above."
+        },
+        {
+          "type": "text",
+          "id": "imp_title",
+          "label": "Impregnation Title",
+          "default": "Full functionality. Full performance. Like new again - with our waterproofing service."
+        },
+        {
+          "type": "textarea",
+          "id": "imp_text",
+          "label": "Impregnation Text"
+        },
+        {
+          "type": "text",
+          "id": "imp_subtitle",
+          "label": "Impregnation Subtitle",
+          "default": "How the service works:"
+        },
+        {
+          "type": "textarea",
+          "id": "rep_text",
+          "label": "Repair Text",
+          "info": "Only used if 'Repair Service Layout' is selected above."
+        }
+      ]
+    },
+    {
+      "type": "color_image",
+      "name": "Color Overview Image",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "default_img",
+          "label": "Fallback Image URL"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "service_step",
+      "name": "Service Step (Icon)",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon_img",
+          "label": "Icon Image"
+        },
+        {
+          "type": "text",
+          "id": "icon_url",
+          "label": "Icon Fallback URL (SVG)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Step Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Description of the service step goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Teamwear Page"
+    }
+  ]
+}
+{% endschema %}

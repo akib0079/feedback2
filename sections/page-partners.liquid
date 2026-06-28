@@ -1,0 +1,322 @@
+<div class="custom-partners-page">
+  <!-- Banner -->
+  {% assign desktop_img_url = section.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner.png?v=1782150950' %}
+  {% assign mobile_img_url = section.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Containerbanner-mobile.png?v=1782150998' %}
+  
+  <div class="custom-partners-banner">
+    <div class="custom-partners-banner__image-wrapper">
+      {% if section.settings.image_desktop != blank %}
+        <img src="{{ section.settings.image_desktop | image_url: width: 2500 }}" alt="{{ section.settings.heading | escape }}" class="custom-partners-banner__img desktop-only" loading="eager">
+      {% else %}
+        <img src="{{ desktop_img_url }}" alt="{{ section.settings.heading | escape }}" class="custom-partners-banner__img desktop-only" loading="eager">
+      {% endif %}
+      
+      {% if section.settings.image_mobile != blank %}
+        <img src="{{ section.settings.image_mobile | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="custom-partners-banner__img mobile-only" loading="eager">
+      {% else %}
+        <img src="{{ mobile_img_url }}" alt="{{ section.settings.heading | escape }}" class="custom-partners-banner__img mobile-only" loading="eager">
+      {% endif %}
+    </div>
+    <div class="custom-partners-banner__overlay"></div>
+    {% if section.settings.heading != blank %}
+      <div class="custom-partners-banner__content custom-partners-container">
+        <h1 class="custom-partners-banner__heading">{{ section.settings.heading }}</h1>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Partners Section -->
+  <div class="custom-partners-grid-section">
+    <div class="custom-partners-container">
+      {% if section.settings.partners_title != blank %}
+        <h2 class="custom-partners-title">{{ section.settings.partners_title }}</h2>
+      {% endif %}
+      
+      <div class="custom-partners-grid">
+        {% for block in section.blocks %}
+        <div class="custom-partner-item" {{ block.shopify_attributes }}>
+            {% assign partner_img = block.settings.image_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/image_20.png?v=1782151307' %}
+            {% if block.settings.image != blank %}
+              {% assign img_alt = block.settings.image.alt | default: 'Partner' %}
+              {% if block.settings.image.src contains '.svg' %}
+                <img src="{{ block.settings.image | image_url }}" alt="{{ img_alt }}" class="custom-partner-img" loading="lazy" style="max-width: {{ block.settings.logo_width }}px; max-height: {{ block.settings.logo_height }}px;">
+              {% else %}
+                <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ img_alt }}" class="custom-partner-img" loading="lazy" style="max-width: {{ block.settings.logo_width }}px; max-height: {{ block.settings.logo_height }}px;">
+              {% endif %}
+            {% else %}
+              <img src="{{ partner_img }}" alt="Partner" class="custom-partner-img" loading="lazy" style="max-width: {{ block.settings.logo_width }}px; max-height: {{ block.settings.logo_height }}px;">
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #shopify-section-{{ section.id }} .custom-partners-banner {
+    min-height: {{ section.settings.banner_height_desktop }}px;
+  }
+  @media screen and (max-width: 990px) {
+    #shopify-section-{{ section.id }} .custom-partners-banner {
+      min-height: {{ section.settings.banner_height_mobile }}px;
+    }
+  }
+</style>
+
+<style>
+/* Global */
+.custom-partners-page {
+  width: 100%;
+  overflow-x: hidden;
+  color: #000;
+  padding-bottom: 80px;
+}
+.custom-partners-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+}
+.desktop-only { display: block !important; }
+.mobile-only { display: none !important; }
+
+@media screen and (max-width: 767px) {
+  .custom-partners-container { padding: 0 20px; }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+}
+
+/* Banner */
+.custom-partners-banner {
+  position: relative;
+  width: 100%;
+  min-height: 409px;
+  display: flex;
+  align-items: flex-end;
+}
+.custom-partners-banner__image-wrapper {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+}
+.custom-partners-banner__img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.custom-partners-banner__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.35) 100%);
+  z-index: 1;
+}
+.custom-partners-banner__content {
+  position: relative; z-index: 2;
+  padding-bottom: 40px;
+}
+.custom-partners-banner__heading {
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100px; /* 125% */
+  margin: 0;
+}
+
+/* Partners Section */
+.custom-partners-grid-section {
+  padding-top: 80px;
+}
+.custom-partners-title {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 48px; /* 150% */
+  margin: 0 0 60px 0;
+  text-align: center;
+}
+
+/* Grid */
+.custom-partners-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+.custom-partner-item {
+  background-color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 308px;
+  padding: 20px;
+  border: 1px solid rgba(241, 241, 241, 1);
+}
+.custom-partner-img {
+  width: 100%;
+  max-width: 307px;
+  height: auto;
+  max-height: 200px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .custom-partners-page {
+    padding-bottom: 40px;
+  }
+  .custom-partners-banner {
+    min-height: 290px;
+    padding-bottom: 0px;
+  }
+  .custom-partners-banner__content {
+    padding-bottom: 30px;
+  }
+  .custom-partners-banner__heading {
+    font-size: 48px;
+    line-height: 100%; /* 48px */
+  }
+  .custom-partners-grid-section {
+    padding-top: 40px;
+  }
+  .custom-partners-title {
+    text-align: center;
+    font-size: 20px;
+    line-height: 150%; /* 30px */
+    margin-bottom: 40px;
+  }
+  .custom-partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .custom-partner-item {
+    height: 195px;
+  }
+  .custom-partner-img {
+    max-width: 149px;
+    max-height: 100px;
+    width: 100%;
+    height: auto;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Partners Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Banner Heading",
+      "default": "Partners and associations"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "image_desktop_url",
+      "label": "Fallback Desktop Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner.png?v=1782150950"
+    },
+    {
+      "type": "text",
+      "id": "image_mobile_url",
+      "label": "Fallback Mobile Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Containerbanner-mobile.png?v=1782150998"
+    },
+    {
+      "type": "header",
+      "content": "Partners Section"
+    },
+    {
+      "type": "text",
+      "id": "partners_title",
+      "label": "Section Title",
+      "default": "#MADEBYPROS — United by trust, team spirit, and a powerful community."
+    },
+    {
+      "type": "header",
+      "content": "Banner Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "banner_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 410
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "min": 150,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 290
+    }
+  ],
+  "blocks": [
+    {
+      "type": "partner",
+      "name": "Partner Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo Image"
+        },
+        {
+          "type": "text",
+          "id": "image_url",
+          "label": "Fallback Logo URL",
+          "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/image_20.png?v=1782151307"
+        },
+        {
+          "type": "range",
+          "id": "logo_width",
+          "min": 50,
+          "max": 500,
+          "step": 5,
+          "unit": "px",
+          "label": "Logo Max Width",
+          "default": 305
+        },
+        {
+          "type": "range",
+          "id": "logo_height",
+          "min": 20,
+          "max": 300,
+          "step": 5,
+          "unit": "px",
+          "label": "Logo Max Height",
+          "default": 200
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Partners Page",
+      "blocks": [
+        { "type": "partner" },
+        { "type": "partner" },
+        { "type": "partner" },
+        { "type": "partner" },
+        { "type": "partner" },
+        { "type": "partner" }
+      ]
+    }
+  ]
+}
+{% endschema %}

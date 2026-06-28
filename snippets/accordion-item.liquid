@@ -1,0 +1,79 @@
+<accordion-item>
+    <details class="custom-accordion__item" {{ block.shopify_attributes }}{%if open %} open{% endif %}>
+        <summary class="custom-accordion__summary">
+            <h4 class="custom-accordion__title">
+                {{title}}
+            </h4>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="custom-accordion__icon">
+            <path d="M7 14L12 9L17 14" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </summary>
+        <div class="custom-accordion__content">
+            {{content}}
+        </div>
+    </details>
+</accordion-item>
+{% stylesheet %}
+  .custom-accordion__list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .custom-accordion__item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+    }
+
+    .custom-accordion__item:first-child {
+    border-top: none;
+    }
+
+    .custom-accordion__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    cursor: pointer;
+    list-style: none; /* Hide default arrow */
+    user-select: none;
+    }
+
+
+    .custom-accordion__summary::-webkit-details-marker {
+    display: none;
+    }
+
+    .custom-accordion__title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 160%;
+        padding-right: 20px;
+        }
+
+    .custom-accordion__icon {
+    transition: transform 0.3s ease;
+    width: 24px;
+    height: 24px;
+    }
+
+    .custom-accordion__item:not([open]) .custom-accordion__icon {
+    transform: rotate(180deg);
+    }
+
+    .custom-accordion__content {
+    padding-bottom: 48px;
+    line-height: 1.6;
+    }
+
+    .custom-accordion__content p {
+        margin: 0 0 1em 0;
+    }
+    .custom-accordion__content p:last-child {
+        margin-bottom: 0;
+    }
+    .custom-accordion__content ul {
+        margin: 0;
+        padding-left: 1.5em;
+    }
+{% endstylesheet %}

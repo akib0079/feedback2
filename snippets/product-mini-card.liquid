@@ -1,0 +1,442 @@
+{% comment %}
+  Renders a mini product card for "Complete Your Look" block.
+  Usage:
+    {% render 'product-mini-card', bt_product: bt_product %}
+{% endcomment %}
+
+{% if version == 'v2' %}
+    {% assign v2 = true %}
+{% endif %}
+
+<product-mini-card
+  class="product-mini-card {{ version }}"
+  data-product-id="{{ bt_product.id }}"
+>
+  <script type="application/json" class="pmc__variants-data">
+    {{ bt_product | json }}
+  </script>
+
+  <div class="pmc__content-wrap">
+  <!-- Image -->
+    <a href="{{ bt_product.url }}" class="pmc__img-wrap" tabindex="-1" aria-hidden="true">
+        {% if v2 %}
+            <div class="pmc__img-gallery swiper">
+                <div class="swiper-wrapper">
+                    {% assign no_gallery_image = true %}
+                    {%- for option in bt_product.options_with_values -%}
+                            {%- liquid
+                                assign sanitized_setting = settings.swatch_option_name | downcase
+                                assign option_name = option.name | downcase
+                            -%}
+                            
+                            {%- if sanitized_setting contains option_name -%}
+                                {%- for value in option.values, limit: 4  -%}
+                                    {% assign no_gallery_image = false %}
+                                    {% assign variant = value.variant %}
+                                    <div class="swiper-slide" data-media-id="{{ variant.featured_image.id }}">
+                                        {% if variant.featured_media != blank %}
+                                            {{
+                                                variant.featured_image | default: bt_product.featured_image
+                                                | image_url: width: 300
+                                                | image_tag: class: 'pmc__img', loading: 'lazy', alt: bt_product.title
+                                            }}
+                                        {% else %}
+                                            {{ 'product-1' | placeholder_svg_tag: 'product-card__alt_img' }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if  no_gallery_image%}
+                            <div class="swiper-slide" data-media-id="{{ variant.featured_media.id }}">
+                                {% if bt_product.featured_image != blank %}
+                                    {{
+                                        bt_product.featured_image
+                                        | image_url: width: 300
+                                        | image_tag: class: 'pmc__img', loading: 'lazy', alt: bt_product.title
+                                    }}
+                                {% else %}
+                                    {{ 'product-1' | placeholder_svg_tag: 'product-card__alt_img' }}
+                                {% endif %}
+                            </div>
+                    {%- endif -%}
+                </div>
+            </div>
+        {% else %}
+            {%- if bt_product.featured_image -%}
+            {{
+                bt_product.selected_or_first_available_variant.featured_image | default: bt_product.featured_image
+                | image_url: width: 300
+                | image_tag: class: 'pmc__img', loading: 'lazy', alt: bt_product.title
+            }}
+            {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'pmc__img' }}
+            {%- endif -%}
+        {%- endif -%}
+    </a>
+    <div class="pmc__content">
+    <!-- Title -->
+    <a href="{{ bt_product.url }}"><h5  class="pmc__title">{{ bt_product.title }}</h5></a>
+
+    <!-- Price -->
+    <p class="pmc__price">{{ bt_product.price | money }}</p>
+    {% if v2 == true %}
+        <div class="pmc__option-selectors" data-pmc-sizes >
+        {%- for option in bt_product.options_with_values -%}
+            {% if settings.swatch_option_name != blank %}
+                {%- capture option_id -%}{{ block.id | default: section.id }}-{{ bt_product.id }}-{{ option.name | handle }}-selector{%- endcapture -%}
+                {%- liquid
+                    assign sanitized_setting = settings.swatch_option_name | downcase
+                    assign option_name = option.name | downcase
+                -%}
+            {% endif %}
+            {%- if sanitized_setting contains option_name -%}
+                <div class="pmc__option-selector option-selector--swatch"  data-option-index="{{ forloop.index0 }}" role="radiogroup" aria-labelledby="{{ option_id }}-Label">
+                    <div class="pmc__option-selector_btns">
+                    {%- for value in option.values -%}
+                        {% liquid
+                            assign img = value.variant.featured_media
+                        %}
+                        <input class="pmc__opt-btn js-option"
+                                    type="radio"
+                                name="{{ option_id }}"
+                                id="{{ option_id }}-opt-{{ forloop.index0 }}"
+                                data-position="{{ option.position }}"
+                                value="{{ value | escape }}"
+                                data-media-id="{{ img.id }}"
+                                {% if option.selected_value == value %}checked{% endif %}
+                                required>
+                        
+                        <label class="pmc__opt-label" data-swatch="{{ value | replace: '"', '' | downcase }}" for="{{ option_id }}-opt-{{ forloop.index0 }}">
+                                {% if img != blank %}
+                                    {{ img | image_url: width: 600 | image_tag: class: 'pmc__opt-img' }}
+                                {% else %}
+                                    {{ 'product-1' | placeholder_svg_tag: 'pmc__opt-img placeholder' }}
+                                {% endif %}
+                                <span class="pmc__opt-label_text">{{ value }}</span>
+                            </label>
+                    {%- endfor -%}
+                    </div>
+                </div>
+            {%- else -%}
+                <div class="pmc__option-selector option-selector--secondary"  data-option-index="{{ forloop.index0 }}" role="radiogroup" aria-labelledby="{{ option_id }}-Label">
+                    <div class="pmc__option-selector_btns">
+                        {%- for value in option.values -%}
+                            <input class="pmc__opt-btn js-option"
+                                type="radio"
+                                name="{{ option_id }}"
+                                id="{{ option_id }}-opt-{{ forloop.index0 }}"
+                                data-position="{{ option.position }}"
+                                value="{{ value | escape }}"
+                                data-media-id="{{ img.id }}"
+                                {% if option.selected_value == value %}checked{% endif %}
+                                required>
+                                <label class="pmc__opt-label" data-swatch="{{ value | replace: '"', '' | downcase }}" for="{{ option_id }}-opt-{{ forloop.index0 }}">
+                                    <span class="pmc__opt-label_text">{{ value }}</span>
+                                </label>
+                            {%- endfor -%}
+                        </div>
+                    </div>
+                {% endif %}
+            {%- endfor -%}
+        </div>
+        {% endif %}
+    </div>
+    </div>
+
+  <!-- Info -->
+  <div class="pmc__right">
+
+
+    
+
+    <!-- Size picker (shown only when product has variants) -->
+    
+    {% if v2 != true and settings.secondary_option_name != blank %}
+        {%- for option in bt_product.options_with_values -%}
+            {%- capture option_id -%}{{ block.id | default: section.id }}-{{ bt_product.id }}-{{ option.name | handle }}-selector{%- endcapture -%}
+            {%- liquid
+                assign sanitized_setting = settings.secondary_option_name | downcase
+                assign option_name = option.name | downcase
+            -%}
+            {%- if sanitized_setting contains option_name -%}
+                <div class="pmc__option-selector option-selector--secondary" data-pmc-sizes  data-option-index="{{ forloop.index0 }}" role="radiogroup" aria-labelledby="{{ option_id }}-Label">
+                    <div class="pmc__option-selector_btns">
+                    {%- for value in option.values -%}
+                        <input class="pmc__opt-btn js-option{% unless value.available %} is-unavailable{% endunless %}"
+                                    type="radio"
+                                name="{{ option_id }}"
+                                id="{{ option_id }}-opt-{{ forloop.index0 }}"
+                                data-position="{{ option.position }}"
+                                value="{{ value | escape }}"
+                                data-media-id="{{ img.id }}"
+                                {% if option.selected_value == value %}checked{% endif %}
+                                required>
+                        <label class="pmc__opt-label" data-swatch="{{ value | replace: '"', '' | downcase }}" for="{{ option_id }}-opt-{{ forloop.index0 }}">
+                            <span class="pmc__opt-label_text">{{ value }}</span>
+                        </label>
+                    {%- endfor -%}
+                    </div>
+                </div>
+            {% endif %}
+        {%- endfor -%}
+    {% endif %}
+    <a
+        href="{{ bt_product.url }}"
+        class="pmc__cta button{% unless bt_product.available %} is-unavailable{% endunless %}"
+        data-pmc-cta
+        data-variant-id="{{ bt_product.first_available_variant.id }}"
+        aria-label="Add {{ bt_product.title }} to cart"
+        {% unless bt_product.available %}aria-disabled="true"{% endunless %}
+    >
+        <span class="pmc__cta-cart">
+            {% render 'svg-cart' %}
+        </span>
+        <span class="pmc__cta-plus">
+            {% render 'svg-plus' %}
+            {% render 'svg-check' %}
+        </span>
+    </a>
+  </div>
+
+  <!-- Add to cart CTA -->
+  
+</product-mini-card>
+{% stylesheet %}
+/* =========================================
+   Complete Your Look — Block Wrapper
+   ========================================= */
+.product-alt__cyl {
+  margin-top: 28px;
+  padding: 20px;
+  background: #F7F7F7;  
+  display: flex;
+  flex-direction: column;
+  grid-gap: 10px;
+    @media screen and (max-width: 749px) {
+        grid-column: span 3;
+        padding: 30px var(--page-margin);
+    }
+}
+.product-alt__cyl_title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: none;
+    margin: 0;
+}
+.product-alt__cyl_subtitle {
+  margin: 0;
+  line-height: 1.5;
+}
+.product-alt__cyl_list {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 10px;
+  overflow: hidden;
+}
+
+/* =========================================
+   Product Mini Card (pmc)
+   ========================================= */
+.product-mini-card {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    background: var(--color-background);
+    position: relative;
+    justify-content: space-between;
+    @media screen and (max-width: 749px) {
+        flex-direction: column;
+        grid-gap: 5px 10px ;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto 1fr;
+    }
+}
+/* Image */
+.pmc__img-wrap {
+  width: 90px;
+  height: 90px;
+  .product-mini-card.v2 &{
+    width: 142px;
+    height: 142px;
+    @media screen and (max-width: 749px) {
+        width: 90px;
+        height: 90px;
+    }
+  }
+  flex-shrink: 0;
+  background: #F1F1F1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pmc__img-gallery{
+    mix-blend-mode: darken; 
+}
+.pmc__img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Body */
+.pmc__content-wrap {
+  display: flex;
+  grid-gap: 15px;
+    @media screen and (max-width: 749px) {
+        display: contents;
+    }
+}
+.pmc__content {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 5px;
+  min-width: 0;    
+  max-width: 170px;
+  text-align: left;
+    @media screen and (max-width: 749px) {
+        max-width: none;
+        grid-row: span 2;
+    }
+}
+
+
+/* Title */
+.pmc__title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  .product-mini-card.v2 &{
+    -webkit-line-clamp: 1;
+    margin-top: 19px;
+  }
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
+}
+
+/* Price */
+.pmc__price {
+  font-family: var(--font-heading--family);
+  line-height: 1.28;
+  margin: 0;
+}
+
+/* Sizes */
+.pmc__right {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: space-between;
+    grid-gap: 10px;
+    @media screen and (max-width: 749px) {
+        flex-direction: row-reverse;
+        align-items: start;
+    }
+}
+.pmc__option-selector{
+    @media screen and (min-width: 750px) {
+        &.option-selector--secondary{
+            visibility: hidden;
+            opacity: 0;
+        }
+    }
+    transition: 0.4s ease-out;
+    transition-property: visibility, opacity;
+    .pmc__option-selector_btns{
+        display: flex;
+        align-items: center;
+    }
+    .pmc__opt-btn{
+        display: none;
+    }
+    .pmc__opt-label {
+        line-height: 1.2em;
+        padding: 0 7.5px;
+        opacity: 0.5;
+        transition: 0.4s ease-out;
+        transition-property: opacity;
+    }
+    .pmc__opt-btn:checked+.pmc__opt-label{
+        opacity: 1;
+    }
+    .pmc__opt-btn.is-unavailable + .pmc__opt-label{
+        display: none;
+    }
+
+}
+.product-mini-card:hover .pmc__option-selector{
+    visibility: visible;
+    opacity: 1;
+}
+
+/* CTA Button */
+.pmc__cta {
+    flex-shrink: 0;
+    display: flex;
+    padding: 10px 20px;
+    min-height: 45px;
+    align-items: center;
+    grid-gap: 10px;
+    margin-top: auto;
+    @media screen and (max-width: 749px) {
+        margin-right: auto;
+        margin-top: 0;
+    }
+    svg{
+        width: 20px;
+        height: 20px;
+    }
+    &.check  .pmc__cta-plus svg:nth-child(1){
+        display: none;
+    }
+    &:not(.check)  .pmc__cta-plus svg:nth-child(2){
+        display: none;
+    }
+}
+.pmc__cta:active:not(.is-unavailable) {
+  transform: scale(0.95);
+}
+.pmc__cta.is-unavailable {
+  background: #B0B0B0;
+  cursor: not-allowed;
+}
+.pmc__option-selectors{
+    display: flex;
+    flex-direction: column;
+    grid-gap: 14px;
+    margin-top: 5px;
+}
+.product-mini-card{
+    .option-selector--swatch{
+        .pmc__option-selector_btns{
+            grid-gap: 6px;
+        }
+        .pmc__opt-label{
+            padding: 0;
+            background: #F1F1F1;
+            /* background-blend-mode: multiply, normal; */
+            opacity: 1;
+            border: 1px solid transparent;
+            transition-property: border-color;
+        }
+        .pmc__opt-img{
+            width: 40px;
+            aspect-ratio: 1/1;
+            mix-blend-mode: darken;
+        }
+        .pmc__opt-label_text{
+            display: none;
+        }
+        .pmc__opt-btn:checked+.pmc__opt-label{
+            border-color: #0005;
+        }
+    }
+}
+{% endstylesheet %}

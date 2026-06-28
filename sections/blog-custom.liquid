@@ -1,0 +1,425 @@
+<div class="blog-custom-page">
+  <!-- Banner -->
+  {% assign desktop_img_url = section.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_blog_desktop.png?v=1782191062' %}
+  {% assign mobile_img_url = section.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ContainerbannerMobile.png?v=1782191061' %}
+
+  <div class="blog-custom-banner">
+    <div class="blog-custom-banner__image-wrapper">
+      {% if section.settings.image_desktop != blank %}
+        <img src="{{ section.settings.image_desktop | image_url: width: 2500 }}" alt="{{ section.settings.heading | escape }}" class="blog-custom-banner__img blog-custom-desktop-only" loading="eager">
+      {% else %}
+        <img src="{{ desktop_img_url }}" alt="{{ section.settings.heading | escape }}" class="blog-custom-banner__img blog-custom-desktop-only" loading="eager">
+      {% endif %}
+
+      {% if section.settings.image_mobile != blank %}
+        <img src="{{ section.settings.image_mobile | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="blog-custom-banner__img blog-custom-mobile-only" loading="eager">
+      {% else %}
+        <img src="{{ mobile_img_url }}" alt="{{ section.settings.heading | escape }}" class="blog-custom-banner__img blog-custom-mobile-only" loading="eager">
+      {% endif %}
+    </div>
+    <div class="blog-custom-banner__overlay"></div>
+    {% if section.settings.heading != blank %}
+      <div class="blog-custom-banner__content blog-custom-container">
+        <h1 class="blog-custom-banner__heading">{{ section.settings.heading }}</h1>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Blog Grid -->
+  <div class="blog-custom-grid-section">
+    <div class="blog-custom-container">
+      <div class="blog-custom-grid">
+        {% paginate blog.articles by section.settings.posts_per_page %}
+          {% for article in blog.articles %}
+            <a href="{{ article.url }}" class="blog-custom-card">
+              <!-- Image -->
+              {% if article.image %}
+                <div class="blog-custom-card__image-wrap">
+                  <img
+                    src="{{ article.image | image_url: width: 800 }}"
+                    alt="{{ article.image.alt | escape }}"
+                    class="blog-custom-card__img"
+                    loading="lazy"
+                  >
+                </div>
+              {% endif %}
+
+              <!-- Text Block -->
+              <div class="blog-custom-card__text">
+                <!-- Date -->
+                <span class="blog-custom-card__date">
+                  {{ article.published_at | date: "%d/%m/%Y" }}
+                </span>
+
+                <!-- Title -->
+                <h2 class="blog-custom-card__title"><span class="blog-custom-card__title-text">{{ article.title }}</span></h2>
+
+                <!-- Excerpt -->
+                {% if article.excerpt != blank %}
+                  <p class="blog-custom-card__excerpt">{{ article.excerpt | strip_html | truncate: 150 }}</p>
+                {% endif %}
+
+                <!-- Read More -->
+                <span class="blog-custom-card__readmore">
+                  Read more
+                  <img src="https://cdn.shopify.com/s/files/1/0999/0701/0937/files/arrow-down-right-sm.svg?v=1782191403" alt="Arrow" width="16" height="16" class="blog-custom-card__readmore-arrow">
+                </span>
+              </div>
+            </a>
+          {% endfor %}
+        {% endpaginate %}
+      </div>
+
+      <!-- View More / Pagination -->
+      {% paginate blog.articles by section.settings.posts_per_page %}
+        {% if paginate.next %}
+          <div class="blog-custom-viewmore">
+            <a href="{{ paginate.next.url }}" class="blog-custom-viewmore__btn">View more</a>
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Styles -->
+<style>
+  #shopify-section-{{ section.id }} .blog-custom-banner {
+    min-height: {{ section.settings.banner_height_desktop }}px;
+  }
+  @media screen and (max-width: 990px) {
+    #shopify-section-{{ section.id }} .blog-custom-banner {
+      min-height: {{ section.settings.banner_height_mobile }}px;
+    }
+  }
+</style>
+
+<style>
+/* Global */
+@keyframes customPremiumFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes customPremiumFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blog-custom-page {
+  width: 100%;
+  overflow-x: hidden;
+  color: #000;
+  padding-bottom: 80px;
+}
+.blog-custom-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+}
+.blog-custom-desktop-only { display: block !important; }
+.blog-custom-mobile-only { display: none !important; }
+
+@media screen and (max-width: 767px) {
+  .blog-custom-container { padding: 0 20px; }
+  .blog-custom-desktop-only { display: none !important; }
+  .blog-custom-mobile-only { display: block !important; }
+}
+
+/* Banner */
+.blog-custom-banner {
+  position: relative;
+  width: 100%;
+  min-height: 409px;
+  display: flex;
+  align-items: flex-end;
+}
+.blog-custom-banner__image-wrapper {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+}
+.blog-custom-banner__img {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0;
+  animation: customPremiumFadeIn 1s ease-out forwards;
+}
+.blog-custom-banner__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.35) 100%);
+  z-index: 1;
+}
+.blog-custom-banner__content {
+  position: relative; z-index: 2;
+  padding-bottom: 40px;
+}
+.blog-custom-banner__heading {
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100px;
+  margin: 0;
+  opacity: 0;
+  animation: customPremiumFadeUp 0.8s ease-out 0.2s forwards;
+}
+
+/* Blog Grid Section */
+.blog-custom-grid-section {
+  padding: 100px 0;
+}
+.blog-custom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* Blog Card */
+.blog-custom-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: #000;
+  overflow: hidden;
+  opacity: 0;
+  animation: customPremiumFadeUp 0.8s ease-out forwards;
+}
+.blog-custom-card:nth-child(1) { animation-delay: 0.1s; }
+.blog-custom-card:nth-child(2) { animation-delay: 0.2s; }
+.blog-custom-card:nth-child(3) { animation-delay: 0.3s; }
+.blog-custom-card:nth-child(4) { animation-delay: 0.4s; }
+.blog-custom-card:nth-child(5) { animation-delay: 0.5s; }
+.blog-custom-card:nth-child(6) { animation-delay: 0.6s; }
+.blog-custom-card:nth-child(7) { animation-delay: 0.7s; }
+.blog-custom-card:nth-child(8) { animation-delay: 0.8s; }
+.blog-custom-card:nth-child(9) { animation-delay: 0.9s; }
+.blog-custom-card:nth-child(1n+10) { animation-delay: 0.2s; }
+
+/* Card Image */
+.blog-custom-card__image-wrap {
+  width: 100%;
+  height: 290px;
+  overflow: hidden;
+}
+.blog-custom-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.blog-custom-card:hover .blog-custom-card__img {
+  transform: scale(1.05);
+}
+
+/* Card Text Block */
+.blog-custom-card__text {
+  display: flex;
+  padding: 20px 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  align-self: stretch;
+}
+
+/* Date */
+.blog-custom-card__date {
+  color: rgba(0, 0, 0, 0.20);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+/* Title */
+.blog-custom-card__title {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+  text-transform: uppercase;
+  margin: 0;
+}
+.blog-custom-card__title-text {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition: background-size 0.3s ease;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.blog-custom-card:hover .blog-custom-card__title-text {
+  background-size: 100% 1.5px;
+}
+
+/* Excerpt */
+.blog-custom-card__excerpt {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  margin: 0;
+}
+
+/* Read More */
+.blog-custom-card__readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.blog-custom-card__readmore-arrow {
+  width: 16px;
+  height: 16px;
+}
+
+/* View More Button */
+.blog-custom-viewmore {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
+.blog-custom-viewmore__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 32px;
+  background-color: #000;
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-decoration: none;
+  text-transform: capitalize;
+  transition: background-color 0.2s ease;
+}
+.blog-custom-viewmore__btn:hover {
+  background-color: #333;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .blog-custom-page {
+    padding-bottom: 40px;
+  }
+  .blog-custom-banner {
+    min-height: 290px;
+  }
+  .blog-custom-banner__content {
+    padding-bottom: 30px;
+  }
+  .blog-custom-banner__heading {
+    font-size: 48px;
+    line-height: 100%;
+  }
+  .blog-custom-grid-section {
+    padding: 60px 0;
+  }
+  .blog-custom-grid {
+    grid-template-columns: 1fr;
+  }
+  .blog-custom-card__title {
+    font-size: 24px;
+    line-height: 100%;
+  }
+  .blog-custom-card__excerpt {
+    font-size: 14px;
+    line-height: 150%;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Custom Blog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Banner Heading",
+      "default": "Blogs & News"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "image_desktop_url",
+      "label": "Fallback Desktop Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_blog_desktop.png?v=1782191062"
+    },
+    {
+      "type": "text",
+      "id": "image_mobile_url",
+      "label": "Fallback Mobile Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/ContainerbannerMobile.png?v=1782191061"
+    },
+    {
+      "type": "header",
+      "content": "Banner Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "banner_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 410
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "min": 150,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 290
+    },
+    {
+      "type": "header",
+      "content": "Blog Settings"
+    },
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "label": "Posts per page",
+      "default": 9
+    }
+  ]
+}
+{% endschema %}

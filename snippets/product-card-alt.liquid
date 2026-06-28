@@ -1,0 +1,177 @@
+<product-card-alt class="product-card__alt link-underline color-scheme-7">
+    {% assign cheapest_variant = product.variants | sort: 'price' | first %}
+    <script type="application/json" class="prod-data">
+        {{product | json}}
+    </script>
+    <div class="product-card__alt-gallery-wrap">
+        {% if product.tags != blank or request.design_mode %}
+            <div class="product-card__alt_badges">
+            {% for tag in product.tags %}
+                <div class="product-card__alt_badge">
+                {{ tag }}
+                </div>
+            {% endfor %}
+            </div>
+        {% endif %}
+        <div class="product-card__alt-gallery swiper">
+            <div class="swiper-wrapper">
+                
+                                        
+                {% if product.variants != blank %}
+                    {% assign no_gallery_image = true %}
+                    {%- for option in product.options_with_values -%}
+                        {%- capture option_id -%}{{ block.id | default: section.id }}-{{ product.id }}-{{ option.name | handle }}-selector{%- endcapture -%}
+                        {%- liquid
+                            assign sanitized_setting = settings.swatch_option_name | downcase
+                            assign option_name = option.name | downcase
+                        -%}
+                        {%- if sanitized_setting contains option_name -%}
+                            {%- for value in option.values, limit: 4  -%}
+                                {% assign no_gallery_image = false %}
+                                {% assign variant = value.variant %}
+                                <div class="swiper-slide" data-media-id="{{ variant.featured_media.id }}">
+                                    <a class="product-card__alt_img-wrap" href="{{ product.url | within: collection }}">
+                                        {% if variant.featured_media != blank %}
+                                            {{ variant.featured_media | media_tag: class: 'product-card__alt_img', image_size: '600x' }}
+                                        {% else %}
+                                            {{ 'product-1' | placeholder_svg_tag: 'product-card__alt_img' }}
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    {%- if no_gallery_image -%}
+                        <div class="swiper-slide" data-media-id="{{ product.featured_media.id }}">
+                            <a class="product-card__alt_img-wrap" href="{{ product.url | within: collection }}">
+                                {% if product.featured_media != blank %}
+                                    {{ product.featured_media | media_tag: class: 'product-card__alt_img', image_size: '600x' }}
+                                {% else %}
+                                    {{ 'product-1' | placeholder_svg_tag: 'product-card__alt_img' }}
+                                {% endif %}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="swiper-slide" data-media-id="{{ media.id }}">
+                        <a class="product-card__alt_img-wrap" href="{{ product.url | within: collection }}">
+                        {% if settings.product_placeholder_img != blank %}
+                            {{ settings.product_placeholder_img | image_url: width: 600 | image_tag: class: 'product-card__alt_img' }}
+                        {% else %}
+                            {{ 'product-1' | placeholder_svg_tag: 'product-card__alt_img' }}
+                        {% endif %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% comment %} <div class="product__floating-buttons">
+                <a class="quick-action-button product-link quick-action-button--visibility-{{ settings.quickbuy_visibility }} quick-add quick-add-toggle tap-target" href="{{ product.url | within: collection }}" data-variant-id="{{ product.selected_or_first_available_variant.id }}" aria-label="{{ 'actions.add_to_cart' | t }}">
+                    <span class="product__icon-cart">
+                    {% render 'svg-cart', stroke_width: 1.5 %}
+                    </span>
+                    <span class="product__icon-check">
+                    {% render 'svg-cart-check' %}
+                    </span>
+                    {%- if settings.swatch_enabled and settings.prod_thumb_swatches_layout != blank and hide_swatch != true -%}
+                    <div class="product__var_ids">
+                        {%- for variant in product.variants -%}
+                        <input type="hidden" class="product__var_id" data-option-item="{{ variant.title | escape }}" data-available="{{ variant.available }}" value="{{ variant.id }}">
+                        {%- endfor -%}
+                    </div>
+                    {%- endif -%}
+                </a>
+                </div> {% endcomment %}
+        </div>
+        <div class="product-card__alt_floating-buttons"  tabindex="-1">
+            <a class="product-card__alt_floating-action-button" href="{{ product.url }}" data-variant-id="{{ product.variants.first.id }}" aria-label="{{ 'products.product.add_to_cart' | t }}">
+                <span class="product-card__alt_floating-icon-cart">
+                    {% render 'svg-cart' %}
+                </span>
+                <span class="product-card__alt_floating-icon-plus">
+                    {% render 'svg-plus' %}
+                    {% render 'svg-check' %}
+                </span>
+            </a>
+            {% if settings.secondary_option_name != blank %}
+                {%- for option in product.options_with_values -%}
+                    {%- capture option_id -%}{{ block.id | default: section.id }}-{{ product.id }}-{{ option.name | handle }}-selector{%- endcapture -%}
+                    {%- liquid
+                        assign sanitized_setting = settings.secondary_option_name | downcase
+                        assign option_name = option.name | downcase
+                    -%}
+                    {%- if sanitized_setting contains option_name -%}
+                        <div class="product-card__alt_option-selector option-selector--secondary"  data-option-index="{{ forloop.index0 }}" role="radiogroup" aria-labelledby="{{ option_id }}-Label">
+                            <div class="product-card__alt_option-selector_btns">
+                            {%- for value in option.values -%}
+                                <input class="product-card__alt_opt-btn js-option"
+                                            type="radio"
+                                        name="{{ option_id }}"
+                                        id="{{ option_id }}-opt-{{ forloop.index0 }}"
+                                        data-position="{{ option.position }}"
+                                        value="{{ value | escape }}"
+                                        data-media-id="{{ img.id }}"
+                                        {% if option.selected_value == value %}checked{% endif %}
+                                        required>
+                                <label class="product-card__alt_opt-label" data-swatch="{{ value | replace: '"', '' | downcase }}" for="{{ option_id }}-opt-{{ forloop.index0 }}">
+                                    <span class="product-card__alt_opt-label_text">{{ value }}</span>
+                                </label>
+                            {%- endfor -%}
+                            </div>
+                        </div>
+                    {% endif %}
+                {%- endfor -%}
+            {% endif %}
+        </div>
+    </div>
+  <div class="product-card__alt_content">
+        <a class="" href="{{product.url | within: collection }}">
+            <h4 class="product-card__alt_title">
+            <span class="link-underline-text">{{ product.title }}</span>
+            </h4>
+        </a>
+        <div class="product-card__alt_price-wrapper">
+            <div class="product-card__alt_price{% if cheapest_variant.price < cheapest_variant.compare_at_price %} on-sale{% endif %}">
+                <span class="product-card__alt_main-price">{{ cheapest_variant.price | money }}</span>
+                {% if cheapest_variant.price < cheapest_variant.compare_at_price %}
+                    <span class="product-card__alt_compare-price">{{ cheapest_variant.compare_at_price | money }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {%- for option in product.options_with_values -%}
+            {%- capture option_id -%}{{ block.id | default: section.id }}-{{ product.id }}-{{ option.name | handle }}-selector{%- endcapture -%}
+            {%- liquid
+                assign sanitized_setting = settings.swatch_option_name | downcase
+                assign option_name = option.name | downcase
+            -%}
+            {%- if sanitized_setting contains option_name -%}
+                <div class="product-card__alt_option-selector option-selector--swatch"  data-option-index="{{ forloop.index0 }}" role="radiogroup" aria-labelledby="{{ option_id }}-Label">
+                    <div class="product-card__alt_option-selector_btns">
+                        {%- for value in option.values, limit: 4 -%}
+                            {% liquid
+                                assign img = value.variant.featured_media
+                            %}
+                            <input class="product-card__alt_opt-btn js-option{% unless value.available %} is-unavailable{% endunless %}"
+                                    type="radio"
+                                    name="{{ option_id }}"
+                                    id="{{ option_id }}-opt-{{ forloop.index0 }}"
+                                    data-position="{{ option.position }}"
+                                    value="{{ value | escape }}"
+                                    data-media-id="{{ img.id }}"
+                                    {% if option.selected_value == value %}checked{% endif %}
+                                    required>
+                            <label class="product-card__alt_opt-label" data-swatch="{{ value | replace: '"', '' | downcase }}" for="{{ option_id }}-opt-{{ forloop.index0 }}">
+                                {% if img != blank %}
+                                    {{ img | image_url: width: 600 | image_tag: class: 'product-card__alt_opt_img' }}
+                                {% else %}
+                                    {{ 'product-1' | placeholder_svg_tag: 'product-card__alt_opt_img placeholder' }}
+                                {% endif %}
+                                <span class="product-card__alt_opt-label_text">{{ value }}</span>
+                            </label>
+                        {%- endfor -%}
+                    </div>
+                </div>
+            {% endif %}
+        {%- endfor -%}
+    </div>
+</product-card-alt>
+

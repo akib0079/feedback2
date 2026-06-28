@@ -1,0 +1,58 @@
+<div class="header__megamenu__menu" {{ block.shopify_attributes }}>
+  <h5 class="header__megamenu__menu_heading">{{ block.settings.title }}</h5>
+  <div class="header__megamenu__menu_items">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+.header-megamenu__content {
+  display: grid;
+  grid-template-columns: 170px auto;
+}
+.header__megamenu .header__megeamenu__tab-head {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 100%;
+}
+.header__megamenu__menu_heading{
+    font-weight: 700;
+    margin-bottom: 22px;
+  @media screen and (max-width: 749px) {
+    font-size: 16px;
+  }
+}
+.header__megamenu__menu_items {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 22px;
+    max-width: 120px;
+    @media screen and (max-width: 749px) {
+      max-width: 100%;
+    }
+}
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Megamenu Menu",
+  "tag": null,
+  "class": "header__megamenu__menu",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Gloves"
+    }
+  ],
+  "blocks": [{"type": "_megamenu-menu-item"}],
+  "presets": [
+    {
+      "name": "Megamenu Menu",
+      "blocks": [
+        {"type": "_megamenu-menu-item"}
+      ],
+    }
+  ]
+}
+{% endschema %}

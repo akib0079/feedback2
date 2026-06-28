@@ -1,0 +1,104 @@
+{% if section.settings.product.metafields.custom.product_specifications.value != blank or request.design_mode %}
+<div class="section section--full-width-margin section--page-width">
+    {% if section.settings.title != blank %}
+        <h2 class="product-specifications__title">
+            {{ section.settings.title }}
+        </h2>
+    {% endif %}
+  <div class="product-specifications__row">
+    {% for block in section.settings.product.metafields.custom.product_specifications.value %}
+        <div class="product-specifications__specification">
+            {% if block.image != blank %}
+                <div class="product-specifications__img">
+                    {{ block.image | image_url: width: nil | image_tag }}
+                </div>
+            {% endif %}
+            <div class="product-specifications__content">
+                <h5>{{ block.title }}</h5>
+                {% if block.description != blank %}
+                    <div class="product-specifications__desc">{{ block.description | metafield_tag }}</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% stylesheet %}
+    .section-product-specification{
+        padding: 32px 0 64px;
+    }
+    .product-specifications__title{
+        font-size: 32px;
+        line-height: 100%;
+        margin-bottom: 24px;
+        @media screen and (max-width: 749px) {
+            font-size: 24px;
+        }
+    }
+    .product-specifications__row{
+        display: flex;
+        grid-gap: 10px;
+        @media screen and (max-width: 749px) {
+            flex-direction: column;
+            grid-gap: 30px;
+        }
+    }
+    .product-specifications__specification{
+        flex-basis: 100%;
+    }
+    .product-specifications__img{
+        overflow: hidden;
+        img{
+            object-fit: cover;
+            height: 442px;
+            transition: transform 0.3s ease-out;
+            @media screen and (max-width: 749px) {
+                height: 330px;
+            }
+        }
+        &:hover img{
+            transform: scale(1.05);
+        }
+    }
+    .product-specifications__content{
+        margin-top: 23px;
+    }
+    .product-specifications__content h5{
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 100%;
+        margin: 0;
+    }
+    .product-specifications__desc{
+        margin: 10px 0 0;
+        line-height: 150%;
+    }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Product Specifications",
+  "class": "section-product-specification",
+  "enabled_on": {
+    "templates": ["product"],
+  },
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Product specifications",
+    },
+    {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+    },
+  ],
+  "presets": [
+    {
+      "name": "Product Specifications",
+    }
+  ]
+}
+{% endschema %}

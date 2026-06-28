@@ -1,0 +1,217 @@
+{% comment %} <a href="#">
+    {{ block.settings.title }}
+</a> {% endcomment %}
+{% liquid
+  capture tabs
+    content_for 'blocks' 
+  endcapture
+  assign tabs = tabs | split: '=========================='
+  #assign megamenu = megamenu | first
+  assign tab_heads = ''
+  assign tab_contents = ''
+  for content in tabs
+    if content contains 'header__megeamenu__tab-head'
+      assign tab_heads = tab_heads | append: content
+    elsif content contains 'header__megeamenu__tab-content'
+      assign tab_contents = tab_contents | append: content
+    endif
+  endfor
+%}
+<li
+    role="presentation"
+    class="menu-list__list-item"
+>
+    <a
+        href="#"
+        data-skip-node-update="true"
+        class="menu-list__link megamenu-link"
+        aria-haspopup="true"
+        aria-expanded="false"
+        ref="menuitem"
+        data-megemenu-id = "megamenu-{{block.id}}"
+    >
+        <span class="menu-list__link-title">
+          <span class="link-underline-text">
+            {{ block.settings.title }}
+          </span>
+        </span>
+        <span class="menu-list__link-icon hidden--desktop">
+          {% render 'svg-chevron-right' %}
+        </span>
+    </a>
+</li>
+==========================
+
+<header-megamenu id="megamenu-{{block.id}}" class="header__megamenu" data-skip-subtree-update="true" {{ block.shopify_attributes }} tabindex="-1">
+    <div class="section section--full-width-margin section--page-width" >
+      <div class="header-megamenu__mobile-content hidden--desktop">
+        <a class="header-megamenu__back" href="#">{% render 'svg-chevron-right' %} <span>{{  block.settings.back }}</span></a>
+        <h4 class="header-megamenu__title">{{ block.settings.title }}</h4>
+      </div>
+      <div class="header-megamenu__content" >
+        <div class="header-megamenu__tab_heads" >
+            {{ tab_heads }}
+        </div>
+        <div class="header-megamenu__tab_contents" >
+            {{ tab_contents }}
+        </div>
+      </div>
+    </div>
+    <div class="menu-drawer__footer">
+        {% if settings.drawer_show_drawer_localiztion %}
+        <div class="header-drawer__left-disclosure outlined-disclosure js-only">
+          {% render 'localization', input_prefix: 'header-drawer' %}
+        </div>
+        {% endif %}
+        {% if settings.drawer_show_account_link %}
+        <a class="header-drawer__account-link" href="#">
+          {% render 'svg-account' %}
+          <span>{{ 'accessibility.account' | t }}</span>
+        </a>
+        {% endif %}
+        {% if settings.drawer_show_help_menu %}
+          {% capture button_content %}
+              <span class="disclosure__toggle-text">{{ settings.drawer_right_menu_label }}</span>
+              <span class="disclosure__toggle-arrow" role="presentation">{% render 'svg-chevron-down' %}</span>
+          {% endcapture %}
+          {% capture list_content %}
+              {% for link in settings.drawer_right_menu.links %}
+                  <li class="disclosure-list__item">
+                      <a class="disclosure-list__option" href="{{link.url}}" data-disclosure-option>
+                        {{ link.title }}
+                      </a>
+                  </li>
+              {%- endfor -%}
+          {% endcapture %}
+          <div class="header-drawer__right-disclosure outlined-disclosure js-only">
+            {% render 'disclosure-element', input_prefix: 'header-drawer', button_content: button_content, list_content: list_content %}
+          </div>
+        {% endif %}
+      </div>
+</header-megamenu>
+==========================
+{% stylesheet %}
+.header__megamenu{
+  position: absolute;
+  top: calc(100% - 1px);
+  background: #FFF;
+  width: 100%;
+  padding: 48px 0;
+  border-top: 1px solid #0000000D;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-50px);
+  transition: 0.3s ease-in;
+  transition-property: transform, visibility, opacity;
+  max-height: calc(95vh - var(--header-group-height));
+  overflow: auto;
+  @media screen and (max-width: 749px) {
+    position: fixed;
+    padding: 28px 0 0;
+    top: calc(var(--header-group-height) - 2px);
+    z-index: 100;
+    transform: translateX(100px);
+    max-height: calc(100vh - var(--header-group-height));
+  }
+}
+@media screen and (max-width: 749px) {
+  .sticky-header .header__megamenu{
+    top: calc(var(--header-height) - 2px);
+    max-height: calc(100vh - var(--header-height));
+  }
+}
+.header__megamenu:focus-visible{
+  outline: none;
+}
+.megamenu-link.active .link-underline-text{
+  background-size: 100% 1px;
+}
+.header__megamenu.active, .header__megamenu.admin-active{
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0px);
+  transition: 0.3s ease-out;
+  z-index: 2;
+  @media screen and (max-width: 749px) {
+    z-index: 101;
+  }
+}
+.header-megamenu__mobile-content{
+  padding: 0 10px;
+}
+.header-megamenu__back {
+    display: flex;
+    margin-left: -8px;
+    line-height: 150%;
+    align-items: center;
+}
+.header-megamenu__title{
+  font-family: var(--font-body--family);
+  margin-top: 30px;
+}
+.header-megamenu__back svg{
+  transform: rotateZ(180deg);
+}
+.header-megamenu__content {
+  display: grid;
+  grid-template-columns: 170px auto;
+  @media screen and (max-width: 749px) {
+    grid-template-columns: 100%;
+    padding-bottom: 20px;
+  }
+}
+.header-megamenu__tab_heads {
+    display: flex;
+    flex-direction: column;
+    grid-gap: 22px;
+    @media screen and (max-width: 749px) {
+      flex-direction: row;
+      grid-gap: 40px;
+      border-bottom: 1px solid #0000001A;
+      margin-top: 50px;
+      padding: 0 10px 20px;
+    }
+}
+.header-megamenu__tab_contents{
+  position: relative;
+  width: 100%;
+  height: var(--height, auto);
+  transition: 0.2s ease-out;
+  transition-property: height;
+  overflow: hidden;
+  @media screen and (max-width: 749px) {
+    margin-top: 20px;
+  }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Megamenu",
+  "tag": null,
+  "class": "header-megamenu",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Winter"
+    },
+    {
+        "type": "text",
+        "id": "back",
+        "label": "Back Button Text",
+        "default": "Back"
+    }
+  ],
+  "blocks": [{"type": "_megamenu-tabs"}],
+  "presets": [
+    {
+      "name": "Megamenu",
+      "blocks": [
+        {"type": "_megamenu-tabs"}
+      ],
+    }
+  ]
+}
+{% endschema %}

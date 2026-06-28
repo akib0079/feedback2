@@ -1,0 +1,281 @@
+<div class="doc-page">
+  <!-- Banner -->
+  {% assign desktop_img_url = section.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_3af6cbd1-2dc7-4afd-ac2b-b82281592d68.png?v=1782189348' %}
+  {% assign mobile_img_url = section.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-mobile.png?v=1782189347' %}
+
+  <div class="doc-banner">
+    <div class="doc-banner__image-wrapper">
+      {% if section.settings.image_desktop != blank %}
+        <img src="{{ section.settings.image_desktop | image_url: width: 2500 }}" alt="{{ section.settings.heading | escape }}" class="doc-banner__img doc-desktop-only" loading="eager">
+      {% else %}
+        <img src="{{ desktop_img_url }}" alt="{{ section.settings.heading | escape }}" class="doc-banner__img doc-desktop-only" loading="eager">
+      {% endif %}
+
+      {% if section.settings.image_mobile != blank %}
+        <img src="{{ section.settings.image_mobile | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="doc-banner__img doc-mobile-only" loading="eager">
+      {% else %}
+        <img src="{{ mobile_img_url }}" alt="{{ section.settings.heading | escape }}" class="doc-banner__img doc-mobile-only" loading="eager">
+      {% endif %}
+    </div>
+    <div class="doc-banner__overlay"></div>
+    {% if section.settings.heading != blank %}
+      <div class="doc-banner__content doc-container">
+        <h1 class="doc-banner__heading">{{ section.settings.heading }}</h1>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- PDF Links Section -->
+  <div class="doc-links-section">
+    <div class="doc-container">
+      <div class="doc-links-grid">
+        {% for block in section.blocks %}
+          <a href="{{ block.settings.link_url | default: '#' }}" target="_blank" rel="noopener noreferrer" class="doc-link-item" {{ block.shopify_attributes }}>
+            <span class="doc-link-item__text">{{ block.settings.title }}</span>
+            <span class="doc-link-item__arrow">
+              <img src="https://cdn.shopify.com/s/files/1/0999/0701/0937/files/arrow-up-right.svg?v=1782189491" alt="Open" width="20" height="20">
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Styles -->
+<style>
+  #shopify-section-{{ section.id }} .doc-banner {
+    min-height: {{ section.settings.banner_height_desktop }}px;
+  }
+  @media screen and (max-width: 990px) {
+    #shopify-section-{{ section.id }} .doc-banner {
+      min-height: {{ section.settings.banner_height_mobile }}px;
+    }
+  }
+</style>
+
+<style>
+/* Global */
+.doc-page {
+  width: 100%;
+  overflow-x: hidden;
+  color: #000;
+  padding-bottom: 80px;
+}
+.doc-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+}
+.doc-desktop-only { display: block !important; }
+.doc-mobile-only { display: none !important; }
+
+@media screen and (max-width: 767px) {
+  .doc-container { padding: 0 20px; }
+  .doc-desktop-only { display: none !important; }
+  .doc-mobile-only { display: block !important; }
+}
+
+/* Banner */
+.doc-banner {
+  position: relative;
+  width: 100%;
+  min-height: 409px;
+  display: flex;
+  align-items: flex-end;
+}
+.doc-banner__image-wrapper {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+}
+.doc-banner__img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.doc-banner__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.35) 100%);
+  z-index: 1;
+}
+.doc-banner__content {
+  position: relative; z-index: 2;
+  padding-bottom: 40px;
+}
+.doc-banner__heading {
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100px;
+  margin: 0;
+}
+
+/* PDF Links Section */
+.doc-links-section {
+  padding: 100px 0;
+}
+.doc-links-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.doc-link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 88px;
+  padding: 20px;
+  background-color: rgba(249, 249, 249, 1);
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+.doc-link-item:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+.doc-link-item:hover .doc-link-item__arrow img {
+  transform: translate(2px, -2px);
+}
+.doc-link-item__text {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 120%;
+}
+.doc-link-item__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.doc-link-item__arrow img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .doc-page {
+    padding-bottom: 40px;
+  }
+  .doc-banner {
+    min-height: 290px;
+  }
+  .doc-banner__content {
+    padding-bottom: 30px;
+  }
+  .doc-banner__heading {
+    font-size: 48px;
+    line-height: 100%;
+  }
+  .doc-links-section {
+    padding: 60px 0;
+  }
+  .doc-links-grid {
+    grid-template-columns: 1fr;
+  }
+  .doc-link-item__text {
+    font-size: 20px;
+    line-height: 120%;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Declaration of Conformity",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Banner Heading",
+      "default": "Declaration of conformity"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "image_desktop_url",
+      "label": "Fallback Desktop Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_3af6cbd1-2dc7-4afd-ac2b-b82281592d68.png?v=1782189348"
+    },
+    {
+      "type": "text",
+      "id": "image_mobile_url",
+      "label": "Fallback Mobile Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-mobile.png?v=1782189347"
+    },
+    {
+      "type": "header",
+      "content": "Banner Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "banner_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 410
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "min": 150,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 290
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pdf_link",
+      "name": "PDF Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "MANU AS® JUNIOR"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Declaration of Conformity",
+      "blocks": [
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
+        { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,423 @@
+<div class="article-custom-page">
+  <!-- Featured Image Banner -->
+  <div class="article-custom-banner">
+    <div class="article-custom-banner__image-wrapper">
+      {% if article.image %}
+        <img src="{{ article.image | image_url: width: 2500 }}" alt="{{ article.image.alt | default: article.title | escape }}" class="article-custom-banner__img" loading="eager">
+      {% endif %}
+    </div>
+    <div class="article-custom-banner__overlay"></div>
+  </div>
+
+  <!-- Article Content -->
+  <div class="article-custom-body">
+    <div class="article-custom-container">
+
+      <!-- Back Button -->
+      <a href="javascript:history.back()" class="article-custom-back">
+        <img src="https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Icon.svg?v=1782237561" alt="Back" width="16" height="16" class="article-custom-back__icon">
+        <span class="article-custom-back__text">Back</span>
+      </a>
+
+      <!-- Title -->
+      <h1 class="article-custom-title">{{ article.title }}</h1>
+
+      <!-- Date -->
+      <span class="article-custom-date">{{ article.published_at | date: "%d/%m/%Y" }}</span>
+
+      <!-- Article Content -->
+      <div class="article-custom-content">
+        {{ article.content }}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Styles -->
+<style>
+  #shopify-section-{{ section.id }} .article-custom-banner {
+    height: {{ section.settings.banner_height_desktop }}px;
+  }
+  @media screen and (max-width: 990px) {
+    #shopify-section-{{ section.id }} .article-custom-banner {
+      height: {{ section.settings.banner_height_mobile }}px;
+    }
+  }
+</style>
+
+<style>
+/* Global */
+@keyframes customPremiumFadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes customPremiumFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.article-custom-page {
+  width: 100%;
+  overflow-x: hidden;
+  color: #000;
+  padding-bottom: 80px;
+}
+.article-custom-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .article-custom-container { padding: 0 20px; }
+}
+
+/* Featured Image Banner */
+.article-custom-banner {
+  position: relative;
+  width: 100%;
+  height: 409px;
+  overflow: hidden;
+}
+.article-custom-banner__image-wrapper {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+}
+.article-custom-banner__img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  opacity: 0;
+  animation: customPremiumFadeIn 1s ease-out forwards;
+}
+.article-custom-banner__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.35) 100%);
+  z-index: 1;
+}
+
+/* Article Body */
+.article-custom-body {
+  padding-top: 60px;
+}
+
+/* Back Button */
+.article-custom-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: customPremiumFadeUp 0.8s ease-out 0.1s forwards;
+}
+.article-custom-back__icon {
+  width: 16px;
+  height: 16px;
+}
+.article-custom-back__text {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s ease;
+  padding-bottom: 2px;
+}
+.article-custom-back:hover .article-custom-back__text {
+  background-size: 100% 1px;
+}
+
+/* Title */
+.article-custom-title {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100%;
+  text-transform: uppercase;
+  margin: 0 0 20px 0;
+  opacity: 0;
+  animation: customPremiumFadeUp 0.8s ease-out 0.2s forwards;
+}
+
+/* Date */
+.article-custom-date {
+  display: block;
+  color: rgba(0, 0, 0, 0.20);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: customPremiumFadeUp 0.8s ease-out 0.3s forwards;
+}
+
+/* Article Content */
+.article-custom-content {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  opacity: 0;
+  animation: customPremiumFadeUp 0.8s ease-out 0.4s forwards;
+}
+.article-custom-content h2 {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 120%;
+  text-transform: uppercase;
+  margin: 50px 0 20px 0;
+  color: #000;
+}
+.article-custom-content h3 {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 130%;
+  text-transform: uppercase;
+  margin: 40px 0 16px 0;
+  color: #000;
+}
+.article-custom-content h4 {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 140%;
+  text-transform: uppercase;
+  margin: 30px 0 12px 0;
+  color: #000;
+}
+.article-custom-content h5 {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 140%;
+  margin: 25px 0 10px 0;
+  color: #000;
+}
+.article-custom-content h6 {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 150%;
+  margin: 20px 0 10px 0;
+  color: #000;
+}
+.article-custom-content p {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  margin: 0 0 24px 0;
+}
+.article-custom-content img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 40px 0;
+}
+.article-custom-content a {
+  color: #000;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s ease;
+  padding-bottom: 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.article-custom-content a:hover {
+  background-size: 100% 1px;
+  opacity: 0.8;
+}
+.article-custom-content ul,
+.article-custom-content ol {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  margin: 0 0 24px 0;
+  padding-left: 24px;
+}
+.article-custom-content li {
+  margin-bottom: 10px;
+}
+.article-custom-content blockquote {
+  border-left: 3px solid #000;
+  margin: 40px 0;
+  padding: 16px 24px;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 150%;
+  color: #000;
+}
+.article-custom-content blockquote p {
+  margin: 0;
+}
+.article-custom-content strong {
+  font-weight: 700;
+}
+.article-custom-content em {
+  font-style: italic;
+}
+.article-custom-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 30px 0;
+  font-size: 16px;
+}
+.article-custom-content table th,
+.article-custom-content table td {
+  border: 1px solid rgba(241, 241, 241, 1);
+  padding: 12px 16px;
+  text-align: left;
+}
+.article-custom-content table th {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-weight: 700;
+  background-color: rgba(249, 249, 249, 1);
+}
+.article-custom-content hr {
+  border: none;
+  border-top: 1px solid rgba(241, 241, 241, 1);
+  margin: 40px 0;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .article-custom-page {
+    padding-bottom: 40px;
+  }
+  .article-custom-banner {
+    height: 290px;
+  }
+  .article-custom-body {
+    padding-top: 40px;
+  }
+  .article-custom-back {
+    margin-bottom: 20px;
+  }
+  .article-custom-title {
+    color: #000;
+    font-family: "Ziener Helvetica", Arial, sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%;
+    margin-bottom: 15px;
+  }
+  .article-custom-date {
+    margin-bottom: 30px;
+  }
+  .article-custom-content {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+  .article-custom-content h2 {
+    font-size: 24px;
+    line-height: 120%;
+    margin: 40px 0 16px 0;
+  }
+  .article-custom-content h3 {
+    font-size: 20px;
+    line-height: 130%;
+    margin: 30px 0 12px 0;
+  }
+  .article-custom-content h4 {
+    font-size: 18px;
+    line-height: 140%;
+    margin: 25px 0 10px 0;
+  }
+  .article-custom-content h5 {
+    font-size: 16px;
+    line-height: 140%;
+  }
+  .article-custom-content h6 {
+    font-size: 14px;
+    line-height: 150%;
+  }
+  .article-custom-content p {
+    color: #000;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    margin: 0 0 20px 0;
+  }
+  .article-custom-content img {
+    margin: 30px 0;
+  }
+  .article-custom-content ul,
+  .article-custom-content ol {
+    font-size: 14px;
+  }
+  .article-custom-content blockquote {
+    font-size: 18px;
+    margin: 30px 0;
+    padding: 12px 20px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Custom Article",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Banner Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "banner_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 410
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "min": 150,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 290
+    }
+  ]
+}
+{% endschema %}

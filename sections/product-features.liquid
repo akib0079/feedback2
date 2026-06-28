@@ -1,0 +1,98 @@
+{% if section.settings.product.metafields.custom.features.value != blank or request.design_mode %}
+<div class="section section--full-width-margin section--page-width">
+  <div class="product-features__row">
+    {% for block in section.settings.product.metafields.custom.features.value %}
+        <div class="product-features__feature">
+            {% if block.image != blank %}
+                <div class="product-features__img">
+                    {{ block.image | image_url: width: nil | image_tag }}
+                </div>
+            {% endif %}
+            <div class="product-features__feature-content">
+                <h5>{{block.title}}</h5>
+                <p>{{block.description}}</p>
+            </div>
+        </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% stylesheet %}
+    .section-product-features{
+        padding: 36px 0;
+        @media screen and (max-width: 749px) {
+          padding: 30px 0;
+        }
+    }
+    .product-features__row{
+        display: flex;
+        grid-gap: 20px;
+        border-bottom: 1px solid #ECECEC;
+        @media screen and (max-width: 749px) {
+          flex-direction: column;
+          grid-gap: 0px;
+          border-bottom: none;
+        }
+    }
+    .product-features__feature{
+        display: flex;
+        grid-gap: 28px;
+        flex-grow: 1;
+        justify-content: center;
+        align-items: center;
+        min-height: 130px;
+        
+        @media screen and (max-width: 749px) {
+          min-height: 140px;
+          border-bottom: 1px solid #ECECEC;
+        }
+    }
+    .product-features__img{
+        height: 60px;
+        width: auto;
+        @media screen and (max-width: 749px) {
+          width: 52px;
+          height: auto;
+        }
+    }
+    .product-features__img img{
+        height: 100%;
+        width: auto;
+    }
+    .product-features__feature-content{
+      @media screen and (max-width: 749px) {
+        width: 152px;
+      }
+    }
+    .product-features__feature-content h5{
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 150%;
+        margin: 0;
+    }
+    .product-features__feature-content p{
+        margin: 0;
+        line-height: 150%;
+    }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Product Features",
+  "class": "section-product-features",
+  "enabled_on": {
+    "templates": ["product"],
+  },
+  "settings": [
+    {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+    },
+  ],
+  "presets": [
+    {
+      "name": "Product Features",
+    }
+  ]
+}
+{% endschema %}

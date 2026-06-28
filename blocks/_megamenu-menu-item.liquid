@@ -1,0 +1,57 @@
+<a class="header__megamenu__menu-item{% if block.settings.with_color %} with-color{% endif %} link-underline" href="{{ block.settings.url }}" {{ block.shopify_attributes }}>
+  {% if block.settings.with_color %}
+   <span class="header__megamenu__menu-item_color-panel" style="--color: {{ block.settings.color }}" aria-label="{{ block.settings.label }}"></span>
+  {% endif %}
+  <span class="header__megamenu__menu-item_text link-underline-text">{{ block.settings.label }}</span>
+</a>
+
+{% stylesheet %}
+.header__megamenu__menu-item_color-panel {
+    display: inline-flex;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    background: var(--color, #E8E8E9);
+    border-radius: 50%;
+    margin-bottom: -3px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Megamenu Menu Item",
+  "tag": null,
+  "class": "header__megamenu__menu-item",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "label",
+        "label": "Label",
+        "default": "Ski alpine"
+    },
+    {
+        "type": "url",
+        "id": "url",
+        "label": "URL",
+        "default": "/collections/all"
+    },
+    {
+        "type": "checkbox",
+        "id": "with_color",
+        "label": "With Color",
+        "default": false
+    },
+    {
+        "type": "color",
+        "id": "color",
+        "label": "Color",
+        "visible_if": "{{block.settings.with_color}}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Megamenu Menu Item",
+    }
+  ]
+}
+{% endschema %}

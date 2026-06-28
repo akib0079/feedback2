@@ -1,0 +1,16 @@
+<a
+{% if url == blank %}
+    role="link"
+    aria-disabled="true"
+{% else %}
+    href="{{ url }}"
+{% endif %}
+class="
+    {{ class }}
+"
+>
+    <span class="button--text">{{ label }}</span>
+    <span class="button--icon">
+    {% render 'svg-button-arrow' %}
+    </span>
+</a>

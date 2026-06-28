@@ -1,0 +1,66 @@
+<form class="header__search-form" action="{{ routes.search_url }}" method="get">
+    <input type="text" class="header__search-field" placeholder="{{ 'content.search_input_placeholder' | t }}" name="q" value="{{ search.terms | escape }}"{% if block_auto %} autocomplete="off">{% endif %}>
+    <button type="submit" class="header__search-button">{% render 'svg-search' %}</button>
+</form>
+{% stylesheet %}
+  
+.header__search-form{
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 40px;
+  /* margin-left: 15px; */
+  border-radius: 100px;
+  /* overflow: hidden; */
+  z-index: 2;
+  width: 200px;
+  margin-right: 14px;
+  
+    @media screen and (max-width: 749px) {
+        display: none;
+    }
+}
+input.header__search-field{
+  min-height: auto;
+  height: 100%;
+  border-radius: 0;
+  padding: 0;
+  padding-left: 22px;
+  padding-right: 56px;
+  font-size: 14px;
+  letter-spacing: -0.28px;
+  transition: border-color 0.5s ease-out, width 0.5s ease-out, right 0.5s ease-out;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  max-width: calc(100vw - 20px);
+  background: #F1F1F1;
+  border: none; 
+}
+input.header__search-field:focus-visible{
+    outline: none;
+}
+input.header__search-field::placeholder {
+  opacity: 0.5;
+  color: inherit;
+}
+.header__search-button{
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  min-width: 55px;
+  padding: 0 20px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: transparent;
+  border: none;
+  color: inherit;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+}
+.header__search-button:hover{
+  background: transparent;
+}
+{% endstylesheet %}

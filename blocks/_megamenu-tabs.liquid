@@ -1,0 +1,95 @@
+<a class="header__megeamenu__tab-head h4" href="#" data-tab-id="tab-{{ block.id }}"> 
+    {{ block.settings.title }}
+</a>
+==========================
+<div class="header__megeamenu__tab-content" id="tab-{{ block.id }}" {{ block.shopify_attributes }}>
+  <div class="header__megeamenu__tab-menus">
+    {% content_for 'blocks' %}
+  </div>
+  <div class="header__megeamenu__tab-images">
+    {% content_for 'block', type: '_megamenu-image', id: 'img_1' %}
+    {% content_for 'block', type: '_megamenu-image', id: 'img_2' %}
+  </div>
+</div>
+==========================
+
+{% stylesheet %}
+.header-megamenu__content {
+  display: grid;
+  grid-template-columns: 170px auto;
+}
+.header__megamenu .header__megeamenu__tab-head {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 100%;
+  opacity: 0.5;
+  transition: 0.1s ease-out;
+  transition-property: opacity;
+  @media screen and (max-width: 749px) {
+    font-size: 18px;
+  }
+}
+.header__megamenu .header__megeamenu__tab-head.active {
+  opacity: 1;
+}
+.header__megeamenu__tab-menus{
+  display: flex;
+  grid-gap: 54px;
+  @media screen and (max-width: 749px) {
+    flex-direction: column;
+    grid-gap: 40px;
+    padding: 0 10px;
+  }
+}
+.header__megeamenu__tab-content{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.4s ease-out;
+  transition-property: visibility, opacity;
+  display: grid;
+  grid-template-columns: 1fr 392px;
+  grid-gap: 50px;
+  @media screen and (max-width: 749px) {
+    grid-template-columns: 100%;
+  }
+}
+html:not(.shopify-design-mode) .header__megamenu.active .header__megeamenu__tab-content.active, .header__megamenu.admin-active .header__megeamenu__tab-content.admin-active{
+  visibility: visible;
+  opacity: 1;
+  z-index: 2;
+}
+.header__megeamenu__tab-images{
+  display: flex;
+  flex-direction: column;
+  grid-gap: 10px;
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Megamenu Tab",
+  "tag": null,
+  "class": "header__megeamenu__tab",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Men"
+    }
+  ],
+  "blocks": [{"type": "_megamenu-menu"}],
+  "presets": [
+    {
+      "name": "Megamenu Tab",
+      "blocks": [
+        {"type": "_megamenu-menu"}
+      ],
+    }
+  ]
+}
+{% endschema %}

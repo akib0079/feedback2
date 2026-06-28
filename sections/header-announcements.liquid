@@ -1,0 +1,303 @@
+
+
+{% if section.blocks.size > 1 %}
+  <script
+    src="{{ 'announcement-bar.js' | asset_url }}"
+    type="module"
+    fetchpriority="low"
+  ></script>
+{% endif %}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<aside
+  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }}"
+  style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;"
+>
+  {% liquid
+    assign autoplay = false
+    assign show_arrows = false
+    if section.blocks.size > 1
+      assign autoplay = true
+      #assign show_arrows = true
+    endif
+  %}
+  <div class="announcement-bar__content">
+    <div class="header-disclosures outlined-disclosure js-only">
+      {% render 'localization', input_prefix: 'annbar' %}
+    </div>
+    <announcement-bar-component
+      class="announcement-bar__slider"
+      {% if autoplay == true %}
+        autoplay="{{ section.settings.speed }}" aria-live="polite"
+      {% endif %}
+    >
+      {% if show_arrows %}
+        {% render 'slideshow-arrows', icon_style: 'chevron' %}
+      {% endif %}
+
+      <div class="announcement-bar__slides">
+        {% content_for 'blocks' %}
+      </div>
+    </announcement-bar-component>
+    {% if section.settings.show_right_menu %}
+      {% capture button_content %}
+          <span class="disclosure__toggle-text">{{ section.settings.right_menu_label }}</span>
+          <span class="disclosure__toggle-arrow" role="presentation">{% render 'svg-chevron-down' %}</span>
+      {% endcapture %}
+      {% capture list_content %}
+          {% for link in section.settings.right_menu.links %}
+              <li class="disclosure-list__item">
+                  <a class="disclosure-list__option" href="{{link.url}}" data-disclosure-option>
+                    {{ link.title }}
+                  </a>
+              </li>
+          {%- endfor -%}
+      {% endcapture %}
+      <div class="announcement-post-disclosure outlined-disclosure js-only">
+        {% render 'disclosure-element', input_prefix: 'annbar', button_content: button_content, list_content: list_content %}
+      </div>
+    {% endif %}
+  </div>
+</aside>
+
+{% stylesheet %}
+  .header-announcement-section{
+    z-index: 9;
+  }
+  .announcement-bar {
+    border-block-end: var(--border-bottom-width) solid var(--color-border);
+  }
+
+  .announcement-bar__slider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+
+    @media screen and (max-width: 749px) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .announcement-bar__slides {
+    display: grid;
+    grid: [stack] auto / [stack] auto;
+    width: calc(100% - var(--button-size) * 2);
+    max-width: 680px;
+    margin-inline: auto;
+  }
+
+  .announcement-bar__slides > * {
+    grid-area: stack;
+  }
+
+  .announcement-bar__slide {
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+    content-visibility: visible;
+
+    &[aria-hidden='true'] {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  .announcement-bar__slider slideshow-arrows {
+    padding: 0;
+    mix-blend-mode: normal;
+  }
+
+  .announcement-bar__slider slideshow-arrows .slideshow-control {
+    color: var(--color-foreground);
+  }
+
+  .announcement-bar__slider .slideshow-control {
+    display: flex;
+    padding: 0;
+    width: var(--button-size);
+    height: var(--button-size);
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    animation: none;
+
+    @media screen and (min-width: 750px) {
+      --slideshow-control-offset: calc((var(--button-size) - var(--icon-size-xs)) / 2);
+
+      .section--page-width &.slideshow-control--previous {
+        transform: translateX(var(--slideshow-control-offset));
+      }
+    }
+  }
+
+  .announcement-bar__slider .slideshow-control .svg-wrapper {
+    width: var(--icon-size-xs);
+    height: var(--icon-size-xs);
+  }
+
+  .announcement-bar__slide {
+    place-content: center;
+  }
+
+  .announcement-bar__text:first-child {
+    margin: 0;
+  }
+
+  .announcement-bar__link {
+    position: absolute;
+    inset: 0;
+  }
+
+  .announcement-bar__content{
+    display: grid;
+    grid-template-columns: 108px 1fr 108px;
+    align-items: center;
+    grid-gap: 0 30px;
+  }
+  .header-disclosures .disclosure-list {
+      top: 100%;
+      bottom: auto;
+      left: 0;
+      z-index: 402;
+  }
+  .announcement-post-disclosure{
+    justify-self: end;
+  }
+  .announcement-post-disclosure .disclosure-list {
+      top: 100%;
+      bottom: auto;
+      right: 0;
+      z-index: 402;
+  }
+  @media screen and (max-width: 749px) {
+    .header-disclosures, .announcement-post-disclosure{
+      display: none;
+    }
+    .announcement-bar__content{
+      padding: 5px 0;
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.announcement_bar",
+  "class": "header-announcement-section",
+  "blocks": [
+    {
+      "type": "_announcement"
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "t:settings.scroll_speed",
+      "min": 2,
+      "max": 10,
+      "default": 5,
+      "unit": "sec"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_language_selector",
+      "label": "Enable language selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_right_menu",
+      "label": "Enable Right Menu",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "right_menu_label",
+      "label": "Right Menu Label",
+      "default": "Help",
+      "visible_if": "{{section.settings.show_right_menu}}"
+    },
+    {
+      "type": "link_list",
+      "id": "right_menu",
+      "label": "Right Menu Label",
+      "visible_if": "{{section.settings.show_right_menu}}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.appearance"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.section_width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-4",
+      "label": "t:settings.color_scheme"
+    },
+    {
+      "type": "range",
+      "id": "divider_width",
+      "label": "t:settings.divider_thickness",
+      "min": 0,
+      "max": 5,
+      "step": 0.5,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.announcement_bar",
+      "blocks": {
+        "announcement_1": {
+          "type": "_announcement"
+        }
+      },
+      "block_order": ["announcement_1"]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,185 @@
+<search-popup class="header__search-popup">
+    <div class="section section--full-width-margin section--page-width header__search-head-wrap">
+        <div class="header__search-head">
+            {% render 'search-form' %}
+            <a class="header__search-popup-close" href="#"> {% render 'svg-cross' %}</a>
+        </div>
+    </div>
+    <div class="section section--full-width-margin section--page-width search-container">
+    </div>
+</search-popup>
+<div class="header__search-bg-overlay"></div>
+{% javascript %}
+class SearchPopup extends HTMLElement {
+    #abortController = null;
+    connectedCallback() {
+        this.#init();
+        // const sectionId = this.dataset.sectionId;
+        // const button = this.querySelector('.my-btn');
+
+        // button.addEventListener('click', () => {
+        // console.log(`Button clicked inside section: ${sectionId}`);
+        // });
+    }
+    #init(){
+        this.updateSeachContent();
+    }
+    async updateSeachContent(){
+        const html =await this.fetchSearch();
+        this.querySelector('.search-container').innerHTML = html.innerHTML;
+    }
+    fetchSearch(terms = null){
+        if (this.#abortController) {
+            const parser = document.createElement('div');
+            parser.innerHTML = response;
+            const ajaxContainer = parser.querySelector('[data-ajax-container="products"]');
+            abortController.abort();
+        }
+
+        this.#abortController = new AbortController();
+        const signal = this.#abortController.signal;
+        const url = Theme.routes.search_url + '?type=product&view=ajax' + (terms == null ? '' : 'q='+ terms );
+
+        // $('.header__search-form-results').addClass('ajax-loading');
+        return fetch(url, {signal}).
+        then((response) => {
+            if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        }).
+        then((response) => {
+            const parser = document.createElement('div');
+            parser.innerHTML = response;
+            const ajaxContainer = parser.querySelector('[data-ajax-container="search"]');
+            return ajaxContainer;
+        });
+    }
+}
+
+customElements.define('search-popup', SearchPopup);
+{% endjavascript %}
+{% stylesheet %}
+.header__search-popup{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 555;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-50%);
+    transition: 0.2s ease-out;
+    transition-property: transform,opacity,visibility;
+  background: #FFF;
+  .header__search_title{
+    font-weight: 700;
+    margin-bottom: 22px;
+  }
+}
+body.search-active .header__search-popup {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0%);
+}
+.header__search-head-wrap{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.header__search-head{
+    padding: 20px 0;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+.header__search-popup .header__search-form{
+    width: 299px;
+    grid-column: 2;
+}
+.header__search-popup-close{
+  display: flex;
+  transition: 0.3s ease-out;
+  transition-property: opacity;
+  color: inherit;
+  z-index: 2;
+  opacity: 0.6;
+  /* width: 24px;
+    height: 24px; */
+    justify-self: end;
+}
+.header__search-popup-close:hover{
+    opacity: 1;
+}
+.header__search-popup-close svg{
+  width: 24px;
+    height: 24px;
+}
+.search-container{
+    padding: 48px 0;
+}
+.header__search-wrap{
+    display: grid;
+    grid-template-columns: 1fr minmax(500px, 1022px);
+    grid-gap: 30px;
+}
+.header__search-bg-overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+    opacity: 0;
+    transition: .4s ease-out;
+    transition-property: visibility, opacity;
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(7.5px);
+    z-index: 500;
+}
+body.search-active .header__search-bg-overlay{
+    visibility: visible;
+    opacity: 1;
+}
+.header__search_category-swiper{
+    --gap: 16px;
+    margin: 0 calc(-1 * var(--gap) / 2);
+}
+.header__search_category-swiper .swiper-slide{
+    width: calc(var(--gap) + 248px);
+}
+.header__search_category {
+    margin: 0 calc(var(--gap) / 2);
+    display: flex;
+    flex-direction: column;
+}
+.header__search_category-img{
+    height: 245px;
+}
+.header__search-kewords{
+    display: flex;
+    flex-direction: column;
+    grid-gap: 22px;
+}
+.header__search_category-title{
+    margin-top: 14px;
+    font-weight: 700;
+    line-height: 100%;
+}
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Search Popup",
+  "class": "header__search-popup-wrap",
+  "tag": "div",
+  "enabled_on": {
+    "groups": ["aside"]
+  },
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Unique gloves from Oberammergau"
+    },
+  ]
+}
+{% endschema %}

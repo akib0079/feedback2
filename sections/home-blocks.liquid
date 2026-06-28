@@ -1,0 +1,323 @@
+<div class="section section--full-width-margin section--page-width section-id-{{ section.id }}">
+  <div class="home-blocks__grid">
+    {% for block in section.blocks %}
+      <div
+        class="home-blocks__block bg-img-holder{% if block.settings.overlay %} with-overlay{%endif %} color-{{ block.settings.color_scheme }} align-{{ block.settings.align }}"
+        style="--height:{{ block.settings.height }}; --height-mobile:{{ block.settings.height_mobile }}; --grid-column:{{ block.settings.grid_column }}; --align: {{ block.settings.align }};"
+        {{ block.shopify_attributes }}
+      >
+        {% if block.settings.image != blank %}
+          {{
+            block.settings.image
+            | image_url: width: null
+            | image_tag: class: 'home-blocks__block_image bg-img hidden--mobile'
+          }}
+          {{
+            block.settings.image_mobile
+            | default: block.settings.image
+            | image_url: width: null
+            | image_tag: class: 'home-blocks__block_image bg-img mobile-only  hidden--desktop'
+          }}
+        {% else %}
+          {{ 'collection-1' | placeholder_svg_tag: 'home-blocks__block_image bg-img placeholder' }}
+        {% endif %}
+        {% if block.settings.title != blank %}
+          <h3 class="home-blocks__block_title {{ block.settings.type_preset }}">{{ block.settings.title }}</h3>
+        {% endif %}
+        {% if block.settings.desc != blank %}
+          <div class="home-blocks__block_desc-wrap">
+          <div class="home-blocks__block_desc">{{ block.settings.desc }}</div>
+          </div>
+        {% endif %}
+        {% if block.settings.btn_text != blank %}
+            {% comment %} <a
+                {% if block.settings.btn_url == blank %}
+                    role="link"
+                    aria-disabled="true"
+                {% else %}
+                    href="{{ block.settings.btn_url }}"
+                {% endif %}
+                class="
+                    home-blocks__block_button
+                    {{ block.settings.style_class }}
+                "
+                >
+                  <span class="button--text">{{ block.settings.btn_text }}</span>
+                  <span class="button--icon">
+                  {% render 'svg-button-arrow' %}
+                  </span>
+            </a> {% endcomment %}
+            {% assign class = 'home-blocks__block_button ' | append: block.settings.style_class %}
+            {% render 'button-global', label: block.settings.btn_text, url: block.settings.btn_url, class: class %}
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+  const section = document.querySelector('.section-id-{{ section.id }}')
+  section.querySelectorAll('.home-blocks__block_desc-wrap').forEach(ele => {
+    ele.style.setProperty('--height', ele.scrollHeight + 'px')
+  })
+</script>
+{% stylesheet %}
+  .section-home-blocks{
+        padding: 30px 0 36px;
+    }
+    .home-blocks__grid{
+        display: grid;
+        grid-gap: 10px;
+        grid-auto-columns: 1fr;
+    }
+    .home-blocks__block{
+        padding: 30px 32px;
+        min-height: var(--height);
+        display: flex;
+        flex-direction: column;
+        justify-content: var(--align);
+        grid-column: var(--grid-column);
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        @media screen and (max-width: 749px) {
+          justify-content: flex-end;
+          padding: 32px;
+          min-height: var(--height-mobile);
+          grid-column: auto;
+        }
+    }
+    .home-blocks__block.with-overlay::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 67%;
+        z-index: -1;
+        opacity: 0.5;
+        background: linear-gradient(180deg,#00000000 0%,#000 70%);
+    }
+    .home-blocks__block_image{
+        transition: transform 0.5s ease-out;
+        z-index: -2;
+    }
+    .home-blocks__block .home-blocks__block_title{
+        margin: 0;
+        font-weight: 700;
+        max-width: 530px;
+        &.rte{
+            font-size: 28px;
+            line-height: 120%;
+        }
+    }
+    @media screen and (min-width: 750px) {
+      .home-blocks__block:not(.align-center){
+        .home-blocks__block_desc-wrap{
+          height: 0px;
+          overflow: hidden;
+          transition: height 0.3s ease-out;
+        }
+        &:hover .home-blocks__block_desc-wrap{
+          height: var(--height, auto);
+        }
+      }
+    }
+    .home-blocks__block_desc{
+        margin-top: 5px;
+        font-size: 16px;
+        line-height: 150%;
+        
+      @media screen and (max-width: 749px) {
+        font-size: 14px;
+      }
+    }
+    .align-center .home-blocks__block_desc{
+        margin-top: 10px;
+    }
+    .home-blocks__block_button{
+        margin-top: 15px;
+    }
+    .align-center .home-blocks__block_button{
+        margin-top: 20px;
+    }
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Home Blocks",
+  "class": "section-home-blocks",
+  "disabled_on": {
+    "templates": ["password"],
+    "groups": ["aside"]
+  },
+  "settings": [
+  ],
+  "blocks": [
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Title",
+          "default": "Performance activewear with a timeless look"
+        },
+        {
+          "type": "richtext",
+          "id": "desc",
+          "label": "Description",
+          "default": "<p>Designed for comfort, performance, and style on every run down the mountain.</p>"
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": "Button text",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "btn_url",
+          "label": "Button url",
+          "default": "/collections/all"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile image"
+        },
+        {
+          "type": "header",
+          "content": "Appearance"
+        },
+        {
+          "type": "checkbox",
+          "id": "overlay",
+          "label": "Image Overlay",
+          "info": "Transparent Black Overlay",
+          "default": true
+        },
+        {
+            "type": "select",
+            "id": "align",
+            "label": "Align Contents",
+            "options": [
+                {
+                "value": "center",
+                "label": "Center"
+                },
+                {
+                "value": "flex-end",
+                "label": "Bottom"
+                },
+            ],
+            "default": "flex-end"
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme-5",
+          "label": "t:settings.color_scheme"
+        },
+        {
+            "type": "select",
+            "id": "style_class",
+            "label": "t:settings.style",
+            "options": [
+                {
+                "value": "button",
+                "label": "t:options.primary"
+                },
+                {
+                "value": "button-secondary",
+                "label": "t:options.secondary"
+                },
+                {
+                "value": "link",
+                "label": "t:options.link"
+                }
+            ],
+            "default": "button"
+        },
+        {
+          "type": "text",
+          "id": "height",
+          "label": "Height",
+          "default": "417px"
+        },
+        {
+          "type": "text",
+          "id": "height_mobile",
+          "label": "Height mobile",
+          "default": "417px"
+        },
+        {
+          "type": "text",
+          "id": "grid_column",
+          "label": "Grid Column",
+          "default": "auto"
+        },
+        {
+          "type": "header",
+          "content": "t:content.typography"
+        },
+        {
+          "type": "select",
+          "id": "type_preset",
+          "label": "t:settings.preset",
+          "options": [
+            {
+              "value": "rte",
+              "label": "t:options.default"
+            },
+            {
+              "value": "paragraph",
+              "label": "t:options.paragraph"
+            },
+            {
+              "value": "h1",
+              "label": "t:options.h1"
+            },
+            {
+              "value": "h2",
+              "label": "t:options.h2"
+            },
+            {
+              "value": "h3",
+              "label": "t:options.h3"
+            },
+            {
+              "value": "h4",
+              "label": "t:options.h4"
+            },
+            {
+              "value": "h5",
+              "label": "t:options.h5"
+            },
+            {
+              "value": "h6",
+              "label": "t:options.h6"
+            },
+          ],
+          "default": "rte",
+          "info": "t:info.edit_presets_in_theme_settings"
+        },
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Home Blocks",
+      "blocks": [
+        {
+          "type": "block"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

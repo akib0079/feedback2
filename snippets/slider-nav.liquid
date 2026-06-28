@@ -1,0 +1,36 @@
+<div class="slider_nav-wrap">
+    <div class="slider_nav nav-prev">
+        {% render 'svg-slider-arrow' %}
+    </div>
+    <div class="slider_nav nav-next">
+        {% render 'svg-slider-arrow' %}
+    </div>
+</div>
+
+{% stylesheet %}
+.slider_nav-wrap{
+  display: flex;
+  grid-gap: 48px;
+  width: 80px;
+}
+.slider_nav {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  /* width: 50%; */
+  transition: width 0.4s ease-out, opacity 0.4s ease-out;
+  cursor: pointer;
+}
+.slider_nav.nav-prev {
+  transform: rotateY(-180deg);
+}
+.slider_nav.swiper-button-disabled{
+  opacity: 0.5;
+  cursor: auto;
+}
+.slider_nav svg{
+  width: 16px;
+  height: auto;
+  flex-shrink: 0;
+}
+{% endstylesheet %}

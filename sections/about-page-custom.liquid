@@ -1,0 +1,881 @@
+<div class="custom-about-page">
+  {% for block in section.blocks %}
+    {% case block.type %}
+      
+      {% when 'banner' %}
+        {% assign desktop_img_url = block.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/banner-dekstop.png?v=1781555997' %}
+        {% assign mobile_img_url = block.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner-mobile.png?v=1781555997' %}
+        <div class="custom-about-banner" {{ block.shopify_attributes }} style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px; {% if block.settings.adapt_height == false %}--desktop-height: {{ block.settings.desktop_height }}px; --mobile-height: {{ block.settings.mobile_height }}px;{% endif %}">
+          <div class="custom-about-banner__image-wrapper">
+            {% if block.settings.image_desktop != blank %}
+              <img src="{{ block.settings.image_desktop | image_url: width: 2500 }}" alt="{{ block.settings.heading | escape }}" class="custom-about-banner__img desktop-only" loading="lazy">
+            {% else %}
+              <img src="{{ desktop_img_url }}" alt="{{ block.settings.heading | escape }}" class="custom-about-banner__img desktop-only" loading="lazy">
+            {% endif %}
+            
+            {% if block.settings.image_mobile != blank %}
+              <img src="{{ block.settings.image_mobile | image_url: width: 800 }}" alt="{{ block.settings.heading | escape }}" class="custom-about-banner__img mobile-only" loading="lazy">
+            {% else %}
+              <img src="{{ mobile_img_url }}" alt="{{ block.settings.heading | escape }}" class="custom-about-banner__img mobile-only" loading="lazy">
+            {% endif %}
+          </div>
+          <div class="custom-about-banner__overlay"></div>
+          {% if block.settings.heading != blank %}
+            <div class="custom-about-banner__content custom-about-container">
+              <h1 class="custom-about-banner__heading">{{ block.settings.heading }}</h1>
+            </div>
+          {% endif %}
+        </div>
+
+      {% when 'centered_text' %}
+        <div class="custom-about-centered" {{ block.shopify_attributes }} style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;">
+          <div class="custom-about-container">
+            <div class="custom-about-centered__wrapper">
+              {% if block.settings.heading != blank %}
+                <h2 class="custom-about-centered__heading">{{ block.settings.heading }}</h2>
+              {% endif %}
+              {% if block.settings.text != blank %}
+                <div class="custom-about-centered__text">{{ block.settings.text }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+      {% when 'full_width_image' %}
+        {% assign desktop_img_url = block.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/3rd_section.png?v=1781556055' %}
+        {% assign mobile_img_url = block.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/3rd_section-mobile.png?v=1781556054' %}
+        <div class="custom-about-full-image" {{ block.shopify_attributes }} style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px; {% if block.settings.adapt_height == false %}--desktop-height: {{ block.settings.desktop_height }}px; --mobile-height: {{ block.settings.mobile_height }}px;{% endif %}">
+          <div class="custom-about-reveal-wrapper">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 2500 }}" alt="" class="custom-about-reveal-img desktop-only" loading="lazy">
+            {% else %}
+              <img src="{{ desktop_img_url }}" alt="" class="custom-about-reveal-img desktop-only" loading="lazy">
+            {% endif %}
+            
+            {% if block.settings.image_mobile != blank %}
+              <img src="{{ block.settings.image_mobile | image_url: width: 800 }}" alt="" class="custom-about-reveal-img mobile-only" loading="lazy">
+            {% else %}
+              <img src="{{ mobile_img_url }}" alt="" class="custom-about-reveal-img mobile-only" loading="lazy">
+            {% endif %}
+          </div>
+        </div>
+
+      {% when 'split_text' %}
+        <div class="custom-about-split-text" {{ block.shopify_attributes }} style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;">
+          <div class="custom-about-container custom-about-split-text__container custom-about-split-text__container--{{ block.settings.layout | default: 'split' }}">
+            <div class="custom-about-split-text__left">
+              {% if block.settings.heading != blank %}
+                <h2 class="custom-about-split-text__heading">{{ block.settings.heading }}</h2>
+              {% endif %}
+            </div>
+            <div class="custom-about-split-text__right">
+              {% if block.settings.text != blank %}
+                <div class="custom-about-split-text__content">{{ block.settings.text }}</div>
+              {% endif %}
+              {% if block.settings.button_label != blank %}
+                {% render 'button-global', label: block.settings.button_label, url: block.settings.button_link, class: 'button custom-about-split-text__btn' %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+      {% when 'image_text_split' %}
+        {% assign desktop_img_url = block.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Woman_running_on_a_road_with_a_rocky_landscape_in_the_background.png?v=1781556105' %}
+        {% assign mobile_img_url = block.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Woman_running_on_a_mobileroad_with_a_rocky_landscape_in_the_background.png?v=1781556105' %}
+        <div class="custom-about-container custom-about-section-image-text" style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;">
+          <div class="custom-about-image-text custom-about-image-text--{{ block.settings.layout }}" {{ block.shopify_attributes }} style="--desktop-image-width: {{ block.settings.image_width }}%;">
+          <div class="custom-about-image-text__image-wrapper custom-about-image-text__image-wrapper--{{ block.settings.image_ratio }}">
+            <div class="custom-about-reveal-wrapper">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 1400 }}" alt="" class="custom-about-reveal-img desktop-only" loading="lazy">
+              {% else %}
+                <img src="{{ desktop_img_url }}" alt="" class="custom-about-reveal-img desktop-only" loading="lazy">
+              {% endif %}
+              
+              {% if block.settings.image_mobile != blank %}
+                <img src="{{ block.settings.image_mobile | image_url: width: 800 }}" alt="" class="custom-about-reveal-img mobile-only" loading="lazy">
+              {% else %}
+                <img src="{{ mobile_img_url }}" alt="" class="custom-about-reveal-img mobile-only" loading="lazy">
+              {% endif %}
+            </div>
+          </div>
+          <div class="custom-about-image-text__content-wrapper">
+            <div class="custom-about-image-text__content">
+              {% if block.settings.heading != blank %}
+                <h2 class="custom-about-image-text__heading">{{ block.settings.heading }}</h2>
+              {% endif %}
+              {% if block.settings.text_1 != blank %}
+                <div class="custom-about-image-text__text1">{{ block.settings.text_1 }}</div>
+              {% endif %}
+              {% if block.settings.subheading != blank %}
+                <h3 class="custom-about-image-text__subheading">{{ block.settings.subheading }}</h3>
+              {% endif %}
+              {% if block.settings.text_2 != blank %}
+                <div class="custom-about-image-text__text2">{{ block.settings.text_2 }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+    {% endcase %}
+  {% endfor %}
+</div>
+
+<style>
+/* Global */
+.custom-about-page {
+  width: 100%;
+  overflow-x: hidden;
+  color: #000;
+  padding-bottom: 60px;
+}
+
+.custom-about-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+}
+
+.desktop-only { display: block !important; }
+.mobile-only { display: none !important; }
+
+@media screen and (max-width: 767px) {
+  .custom-about-container { padding: 0 20px; }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+}
+
+/* Base Formats */
+.custom-about-page p,
+.custom-about-centered__text,
+.custom-about-split-text__content,
+.custom-about-image-text__text1,
+.custom-about-image-text__text2 {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 150%;
+  color: #000;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+.custom-about-page p:last-child {
+  margin-bottom: 0;
+  color: #000;
+  font-family: Arial;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 200%;
+}
+
+/* Animations */
+.custom-about-reveal-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  clip-path: inset(10% 0 10% 0);
+  transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+.custom-about-reveal-wrapper.is-revealed {
+  clip-path: inset(0 0 0 0);
+}
+.custom-about-reveal-wrapper.is-revealed .custom-about-reveal-img {
+  transform: scale(1);
+}
+
+/* Banner */
+.custom-about-banner {
+  position: relative;
+  width: 100%;
+  min-height: var(--desktop-height, 400px);
+  display: flex;
+  align-items: flex-end;
+}
+.custom-about-banner__image-wrapper {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+}
+.custom-about-banner__img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.custom-about-banner__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(12, 12, 12, 0.15); z-index: 1;
+}
+.custom-about-banner__content {
+  position: relative; z-index: 2;
+  padding-bottom: 40px;
+}
+.custom-about-banner__heading {
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 80px;
+  font-weight: 700;
+  line-height: 100px;
+  margin: 0;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.19);
+}
+
+/* Centered Text */
+.custom-about-centered {
+  padding: 100px 0;
+}
+.custom-about-centered__wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+.custom-about-centered__heading {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 40px 0;
+  line-height: 100%;
+  text-transform: none;
+  color: #000;
+}
+
+/* Full Width Image */
+.custom-about-full-image {
+  width: 100%;
+  margin: 0;
+}
+.custom-about-full-image .custom-about-reveal-img {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  height: var(--desktop-height, auto);
+  object-fit: contain;
+  display: block;
+  transform: scale(1.1);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Split Text */
+.custom-about-split-text {
+  padding: 70px 0;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.custom-about-split-text__container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  max-width: 600px;
+  margin: 0;
+}
+@media screen and (min-width: 768px) {
+  .custom-about-split-text__container--split {
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 100%;
+  }
+}
+.custom-about-split-text__heading {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 100%;
+  text-transform: none;
+  color: #000;
+}
+.custom-about-split-text__btn {
+  margin-top: 30px;
+}
+
+/* Image Text Split */
+.custom-about-image-text {
+  display: grid;
+  grid-template-columns: var(--desktop-image-width, 50%) 1fr;
+  margin: 0px 0;
+  gap: 40px;
+}
+.custom-about-image-text--right .custom-about-image-text__image-wrapper {
+  order: 2;
+}
+.custom-about-image-text--right .custom-about-image-text__content-wrapper {
+  order: 1;
+}
+.custom-about-image-text__image-wrapper {
+  position: relative;
+  width: 100%;
+}
+.custom-about-image-text__image-wrapper--portrait {
+  aspect-ratio: 4/5;
+}
+.custom-about-image-text__image-wrapper--square {
+  aspect-ratio: 1/1;
+}
+.custom-about-image-text__image-wrapper--adapt {
+  aspect-ratio: auto;
+  min-height: 400px;
+}
+.custom-about-reveal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.1);
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+.custom-about-image-text__image-wrapper .custom-about-reveal-wrapper {
+  position: absolute; top:0; left:0; width: 100%; height: 100%;
+}
+.custom-about-image-text__content-wrapper {
+  display: flex;
+  align-items: center;
+}
+.custom-about-image-text__heading {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 30px 0;
+  line-height: 100%;
+  text-transform: none;
+  color: #000;
+}
+.custom-about-image-text__subheading {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 40px 0 20px 0;
+  line-height: 100%;
+  color: #000;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .custom-about-container { padding: 0 20px; }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+
+  .custom-about-banner {
+    min-height: var(--mobile-height, 550px);
+    height: auto;
+    aspect-ratio: auto;
+    margin-bottom: 0;
+    padding: 0px 0px 40px 0px;
+  }
+  .custom-about-banner__heading {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+  .custom-about-centered {
+    margin: 0;
+    padding: 60px 0;
+  }
+  .custom-about-centered__wrapper {
+    text-align: center;
+  }
+  .custom-about-split-text {
+    margin: 0;
+    padding: 60px 0;
+  }
+  .custom-about-full-image {
+    margin: 0;
+    padding: 0;
+  }
+  .custom-about-full-image .custom-about-reveal-img {
+    height: var(--mobile-height, auto);
+  }
+  .custom-about-container .custom-about-full-image {
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+  }
+  .custom-about-section-image-text + .custom-about-full-image {
+    margin-top: 0;
+  }
+  .custom-about-split-text__container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .custom-about-image-text {
+    margin: 0;
+    gap: 0;
+    grid-template-columns: 1fr;
+  }
+  .custom-about-image-text--right .custom-about-image-text__image-wrapper {
+    order: -1;
+  }
+  .custom-about-image-text__image-wrapper {
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+  }
+  .custom-about-image-text__image-wrapper--adapt {
+    min-height: auto;
+    aspect-ratio: 4/5;
+  }
+  .custom-about-image-text__image-wrapper .custom-about-reveal-wrapper {
+    position: relative;
+  }
+  .custom-about-image-text__content-wrapper {
+    padding: 40px 0 60px 0;
+  }
+  .custom-about-split-text__heading,
+  .custom-about-centered__heading,
+  .custom-about-image-text__heading {
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
+  .custom-about-image-text__subheading {
+    font-size: 18px;
+    margin: 40px 0 15px 0;
+  }
+}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const reveals = document.querySelectorAll('.custom-about-reveal-wrapper');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      
+      reveals.forEach(el => observer.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('is-revealed'));
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom About Page",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_desktop",
+          "label": "Banner Image (Desktop)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Banner Image (Mobile)"
+        },
+        {
+          "type": "text",
+          "id": "image_desktop_url",
+          "label": "Fallback Desktop Image URL"
+        },
+        {
+          "type": "text",
+          "id": "image_mobile_url",
+          "label": "Fallback Mobile Image URL"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "About us"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Top Padding",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Bottom Padding",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Image Height"
+        },
+        {
+          "type": "checkbox",
+          "id": "adapt_height",
+          "label": "Adapt to image height",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "desktop_height",
+          "min": 200,
+          "max": 1000,
+          "step": 10,
+          "unit": "px",
+          "label": "Desktop Height",
+          "default": 600
+        },
+        {
+          "type": "range",
+          "id": "mobile_height",
+          "min": 200,
+          "max": 1000,
+          "step": 10,
+          "unit": "px",
+          "label": "Mobile Height",
+          "default": 550
+        }
+      ]
+    },
+    {
+      "type": "centered_text",
+      "name": "Centered Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "German craftsmanship built on decades of experience"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Content goes here.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Top Padding",
+          "default": 100
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Bottom Padding",
+          "default": 100
+        }
+      ]
+    },
+    {
+      "type": "full_width_image",
+      "name": "Full Width Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image Desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image Mobile"
+        },
+        {
+          "type": "text",
+          "id": "image_desktop_url",
+          "label": "Fallback Desktop Image URL"
+        },
+        {
+          "type": "text",
+          "id": "image_mobile_url",
+          "label": "Fallback Mobile Image URL"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Top Padding",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Bottom Padding",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Image Height"
+        },
+        {
+          "type": "checkbox",
+          "id": "adapt_height",
+          "label": "Adapt to image height",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "desktop_height",
+          "min": 200,
+          "max": 1000,
+          "step": 10,
+          "unit": "px",
+          "label": "Desktop Height",
+          "default": 600
+        },
+        {
+          "type": "range",
+          "id": "mobile_height",
+          "min": 200,
+          "max": 1000,
+          "step": 10,
+          "unit": "px",
+          "label": "Mobile Height",
+          "default": 400
+        }
+      ]
+    },
+    {
+      "type": "split_text",
+      "name": "Split Text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "split",
+              "label": "Split Left/Right"
+            },
+            {
+              "value": "stacked",
+              "label": "Stacked Left"
+            }
+          ],
+          "default": "split"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Performance, comfort & style since 1946"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Content goes here.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Top Padding",
+          "default": 70
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Bottom Padding",
+          "default": 70
+        }
+      ]
+    },
+    {
+      "type": "image_text_split",
+      "name": "Image & Text Split",
+      "settings": [
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Image Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Image Left"
+            },
+            {
+              "value": "right",
+              "label": "Image Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image Desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image Mobile"
+        },
+        {
+          "type": "text",
+          "id": "image_desktop_url",
+          "label": "Fallback Desktop Image URL"
+        },
+        {
+          "type": "text",
+          "id": "image_mobile_url",
+          "label": "Fallback Mobile Image URL"
+        },
+        {
+          "type": "select",
+          "id": "image_ratio",
+          "label": "Image Ratio",
+          "options": [
+            {
+              "value": "adapt",
+              "label": "Adapt to image"
+            },
+            {
+              "value": "portrait",
+              "label": "Portrait"
+            },
+            {
+              "value": "square",
+              "label": "Square"
+            }
+          ],
+          "default": "portrait"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "label": "Desktop Image Width",
+          "min": 30,
+          "max": 70,
+          "step": 1,
+          "default": 50,
+          "unit": "%"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Combining innovation, functionality & modern design"
+        },
+        {
+          "type": "richtext",
+          "id": "text_1",
+          "label": "Text 1"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Designed for outdoor adventures in every season"
+        },
+        {
+          "type": "richtext",
+          "id": "text_2",
+          "label": "Text 2"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Top Padding",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Bottom Padding",
+          "default": 0
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom About Page",
+      "blocks": [
+        {
+          "type": "banner"
+        },
+        {
+          "type": "centered_text"
+        },
+        {
+          "type": "full_width_image"
+        },
+        {
+          "type": "split_text"
+        },
+        {
+          "type": "image_text_split"
+        },
+        {
+          "type": "full_width_image"
+        },
+        {
+          "type": "split_text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

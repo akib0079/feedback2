@@ -1,0 +1,25 @@
+<div class="section section--full-width-margin section--page-width section-id-{{ section.id }}">
+  {% content_for 'block', type: '_tabs', id: 'service' %}
+</div>
+{% stylesheet %}
+.section-service-tabs{
+    padding: 50px 0 100px;
+}
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Service Tabs",
+  "class": "section-service-tabs",
+  "disabled_on": {
+    "templates": ["password"],
+    "groups": ["aside"]
+  },
+  "settings": [
+  ],
+  "presets": [
+    {
+      "name": "Service Tabs"
+    }
+  ]
+}
+{% endschema %}

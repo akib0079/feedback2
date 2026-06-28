@@ -1,0 +1,93 @@
+<a class="header__megeamenu__image link-underline" href="{{ block.settings.url }}" data-tab-id="tab-{{ block.id }}" {{ block.shopify_attributes }}> 
+    {% if block.settings.img != blank %}
+        {{ block.settings.img | image_url: width: nil | image_tag: class: 'header__megeamenu__image_img' }}
+    {% else %}
+        {{ 'collection-1' | placeholder_svg_tag: 'header__megeamenu__image_img placeholder' }}
+    {% endif %}
+    <div class="header__megeamenu__image_content">
+        <h4 class="header__megeamenu__image_content_text"><span class="link-underline-text">{{ block.settings.label }}</span></h4>
+        {% render 'svg-arrow' %}
+    </div>
+</a>
+
+{% stylesheet %}
+.header__megeamenu__image {
+    display: flex;
+    width: 100%;
+    height: 245px;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    align-items: flex-end;
+    z-index: 1;
+    color: #FFF;
+}
+.header__megeamenu__image_img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transition: transform 0.4s ease-out;
+    .header__megeamenu__image:hover &{
+        transform: scale(1.05);
+    }
+}
+.header__megeamenu__image_img.placeholder {
+    background: #E8E8E9;
+}
+.header__megeamenu__image_content{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;;
+}
+.header__megeamenu__image_content_text{
+    font-weight: 700;
+    margin: 0;
+}
+.header__megeamenu__image::before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 42%;
+    z-index: -1;
+    background: linear-gradient(0deg, #0005, transparent);
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Megamenu Image",
+  "tag": null,
+  "class": "header__megeamenu__image",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "label",
+        "label": "Label",
+        "default": "New arrivals"
+    },
+    {
+        "type": "url",
+        "id": "url",
+        "label": "URL",
+        "default": "/collections/all"
+    },
+    {
+        "type": "image_picker",
+        "id": "img",
+        "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Megamenu Image",
+    }
+  ]
+}
+{% endschema %}

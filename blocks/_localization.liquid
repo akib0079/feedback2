@@ -1,0 +1,30 @@
+<div class="{{ class }} outlined-disclosure js-only" {{ block.shopify_attributes }}>
+      {% render 'localization', input_prefix: 'annbar' %}
+</div>
+{% schema %}
+{
+  "name": "Localization",
+  "tag": null,
+  "class": "custom-disclosure",
+  "settings": [
+    {
+      "type": "text",
+      "id": "class",
+      "label": "Class",
+      "default": "custom-disclosure"
+    },
+    {
+      "type": "text",
+      "id": "prefix",
+      "label": "Prefix",
+      "default": "custom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Localization",
+      "category": "t:categories.custom"
+    }
+  ]
+}
+{% endschema %}

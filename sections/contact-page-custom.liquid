@@ -1,0 +1,628 @@
+{% schema %}
+{
+  "name": "Custom Contact Page",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "banner_image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Banner Heading",
+      "default": "Get in touch with us"
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ Heading",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "contact_info",
+      "name": "Contact Info",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "url",
+          "id": "icon_url",
+          "label": "Icon URL (SVG)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Label"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Text detail"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Question here?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Provide your answer here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Contact Page",
+      "blocks": [
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/marker-02.svg?v=1781546115",
+            "label": "Adress",
+            "text": "Schwedenqasse 5 | D-82487 Oberammergau"
+          }
+        },
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/phone.svg?v=1781546114",
+            "label": "Phone",
+            "text": "+49 8822 9206-0"
+          }
+        },
+        {
+          "type": "contact_info",
+          "settings": {
+            "icon_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/send-01.svg?v=1781546114",
+            "label": "E-mail",
+            "text": "info@ziener.de"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What do I do if I have a complaint?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long is the guarantee (warranty for defects)?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "What should I do if I don't have the till receipt anymore?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I order spare parts or single gloves?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I look after my ZIENER products?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Where can I buy ZIENER products?",
+            "answer": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<div class="custom-contact-page">
+  <div class="custom-contact-banner">
+    {% if section.settings.banner_image_desktop != blank %}
+      <picture>
+        {% if section.settings.banner_image_mobile != blank %}
+          <source media="(max-width: 768px)" srcset="{{ section.settings.banner_image_mobile | image_url: width: 800 }}">
+        {% else %}
+          <source media="(max-width: 768px)" srcset="{{ section.settings.banner_image_desktop | image_url: width: 800 }}">
+        {% endif %}
+        <img src="{{ section.settings.banner_image_desktop | image_url: width: 1920 }}" alt="{{ section.settings.banner_heading }}" class="custom-contact-banner__img">
+      </picture>
+    {% else %}
+      <div class="custom-contact-banner__placeholder">
+        <picture>
+          <source media="(max-width: 768px)" srcset="https://cdn.shopify.com/s/files/1/0999/0701/0937/files/mobilepng.png?v=1781546117">
+          <img src="https://cdn.shopify.com/s/files/1/0999/0701/0937/files/contactpage.png?v=1781546118" alt="{{ section.settings.banner_heading }}" class="custom-contact-banner__img">
+        </picture>
+      </div>
+    {% endif %}
+    <div class="custom-contact-banner__overlay"></div>
+    <div class="custom-contact-banner__content-wrapper">
+      <div class="custom-contact-banner__content">
+        <h1 class="custom-contact-banner__heading">{{ section.settings.banner_heading }}</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="custom-contact-container">
+    <div class="custom-contact-info-wrapper">
+      <div class="custom-contact-info">
+        {% assign info_blocks = section.blocks | where: 'type', 'contact_info' %}
+        {% for block in info_blocks %}
+          {% if block.settings.link != blank %}
+            <a href="{{ block.settings.link }}" class="custom-contact-info__item" {{ block.shopify_attributes }}>
+          {% else %}
+            <div class="custom-contact-info__item" {{ block.shopify_attributes }}>
+          {% endif %}
+            <div class="custom-contact-info__label-row">
+              {% if block.settings.icon_url != blank %}
+                <img src="{{ block.settings.icon_url }}" alt="" class="custom-contact-info__icon" loading="lazy" width="24" height="24">
+              {% endif %}
+              <div class="custom-contact-info__label">{{ block.settings.label }}</div>
+            </div>
+            <div class="custom-contact-info__text">{{ block.settings.text }}</div>
+          {% if block.settings.link != blank %}
+            </a>
+          {% else %}
+            </div>
+          {% endif %}
+          {% unless forloop.last %}
+            <div class="custom-contact-info__divider"></div>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="custom-contact-faq-section">
+      <div class="custom-contact-faq__header">
+        <h2 class="custom-contact-faq__title">{{ section.settings.faq_heading }}</h2>
+      </div>
+      <div class="custom-contact-faq__list">
+        {% assign faq_blocks = section.blocks | where: 'type', 'faq_item' %}
+        {% for block in faq_blocks %}
+          <details class="custom-contact-faq__item" {{ block.shopify_attributes }}>
+            <summary class="custom-contact-faq__summary">
+              <span class="custom-contact-faq__question">{{ block.settings.question }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="custom-contact-faq__icon">
+                <path d="M7 14L12 9L17 14" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="custom-contact-faq__answer">
+              {{ block.settings.answer }}
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+class FAQAccordion {
+  constructor(el) {
+    this.el = el;
+    this.summary = el.querySelector('summary');
+    this.content = el.querySelector('.custom-contact-faq__answer');
+    this.animation = null;
+    this.isClosing = false;
+    this.isExpanding = false;
+    this.summary.addEventListener('click', (e) => this.onClick(e));
+  }
+
+  onClick(e) {
+    e.preventDefault();
+    this.el.style.overflow = 'hidden';
+    if (this.isClosing || !this.el.hasAttribute('open')) {
+      this.open();
+    } else if (this.isExpanding || this.el.hasAttribute('open')) {
+      this.shrink();
+    }
+  }
+
+  shrink() {
+    this.isClosing = true;
+    const startHeight = `${this.el.offsetHeight}px`;
+    const endHeight = `${this.summary.offsetHeight}px`;
+    if (this.animation) this.animation.cancel();
+    this.animation = this.el.animate({
+      height: [startHeight, endHeight]
+    }, {
+      duration: 300,
+      easing: 'ease-out'
+    });
+    this.animation.onfinish = () => this.onAnimationFinish(false);
+    this.animation.oncancel = () => this.isClosing = false;
+  }
+
+  open() {
+    this.el.style.height = `${this.el.offsetHeight}px`;
+    this.el.setAttribute('open', '');
+    window.requestAnimationFrame(() => {
+      this.isExpanding = true;
+      const startHeight = `${this.el.offsetHeight}px`;
+      const endHeight = `${this.summary.offsetHeight + this.content.offsetHeight}px`;
+      if (this.animation) this.animation.cancel();
+      this.animation = this.el.animate({
+        height: [startHeight, endHeight]
+      }, {
+        duration: 300,
+        easing: 'ease-out'
+      });
+      this.animation.onfinish = () => this.onAnimationFinish(true);
+      this.animation.oncancel = () => this.isExpanding = false;
+    });
+  }
+
+  onAnimationFinish(open) {
+    if (open) {
+      this.el.setAttribute('open', '');
+    } else {
+      this.el.removeAttribute('open');
+    }
+    this.animation = null;
+    this.isClosing = false;
+    this.isExpanding = false;
+    this.el.style.height = this.el.style.overflow = '';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.custom-contact-faq__item').forEach((el) => {
+    new FAQAccordion(el);
+  });
+});
+</script>
+
+<style>
+/* Base styles and resets for this component */
+.custom-contact-page {
+  width: 100%;
+  font-family: var(--font-body-family, sans-serif);
+  color: #000;
+  overflow-x: hidden;
+}
+
+/* Banner styles */
+.custom-contact-banner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 600; /* Approximate ratio from desktop design */
+  min-height: 400px;
+  background-color: #f5f5f5;
+}
+
+.custom-contact-banner__placeholder,
+.custom-contact-banner picture,
+.custom-contact-banner__img,
+.custom-contact-banner__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.custom-contact-banner__overlay {
+  background: rgba(12, 12, 12, 0.15);
+  z-index: 1;
+}
+
+.custom-contact-banner__img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.custom-contact-banner__content-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: flex-end;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px;
+  width: 100%;
+  z-index: 2;
+}
+
+.custom-contact-banner__content {
+  padding-bottom: 40px; /* Offset from bottom */
+}
+
+.custom-contact-banner__heading {
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100px;
+  margin: 0;
+  text-transform: none;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.19);
+}
+
+/* Container for the content below banner */
+.custom-contact-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 40px 80px 40px;
+  width: 100%;
+}
+
+/* Contact Info Section */
+.custom-contact-info-wrapper {
+  width: 100%;
+}
+
+.custom-contact-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  padding: 48px 0;
+  gap: 20px;
+}
+
+.custom-contact-info__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  cursor: pointer;
+  width: 100%;
+  text-decoration: none;
+}
+
+.custom-contact-info__divider + .custom-contact-info__item {
+  padding-left: 40px;
+}
+
+.custom-contact-info__label-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.custom-contact-info__icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.custom-contact-info__label {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  line-height: 1;
+}
+
+.custom-contact-info__text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+  margin-left: 0;
+  position: relative;
+  display: inline-block;
+}
+
+.custom-contact-info__text::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: currentColor;
+  transition: width 0.3s ease-in-out;
+}
+
+.custom-contact-info__item:hover .custom-contact-info__text::after {
+  width: 100%;
+}
+
+.custom-contact-info__divider {
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.20);
+  height: 77px;
+}
+
+/* FAQ Section */
+.custom-contact-faq-section {
+  display: flex;
+  margin-top: 80px;
+  gap: 40px;
+}
+
+.custom-contact-faq__header {
+  flex: 0 0 35%;
+  padding-right: 20px;
+}
+
+.custom-contact-faq__title {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 53px;
+  color: #000;
+  text-transform: none;
+}
+
+.custom-contact-faq__list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-contact-faq__item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+}
+
+.custom-contact-faq__item:first-child {
+  border-top: none;
+}
+
+.custom-contact-faq__summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  cursor: pointer;
+  list-style: none; /* Hide default arrow */
+  user-select: none;
+}
+
+.custom-contact-faq__item:first-child .custom-contact-faq__summary {
+  padding-top: 0;
+}
+
+.custom-contact-faq__summary::-webkit-details-marker {
+  display: none;
+}
+
+.custom-contact-faq__question {
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 29px;
+  color: #000;
+  padding-right: 20px;
+}
+
+.custom-contact-faq__icon {
+  transition: transform 0.3s ease;
+  width: 24px;
+  height: 24px;
+}
+
+.custom-contact-faq__item[open] .custom-contact-faq__icon {
+  transform: rotate(180deg);
+}
+
+.custom-contact-faq__answer {
+  padding-bottom: 24px;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.custom-contact-faq__answer p {
+  margin: 0 0 1em 0;
+}
+.custom-contact-faq__answer p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* Mobile and Tablet Adjustments */
+@media screen and (max-width: 990px) {
+  .custom-contact-banner {
+    min-height: 300px;
+    aspect-ratio: auto;
+  }
+  
+  .custom-contact-banner__heading {
+    font-size: 56px;
+    line-height: 1.1;
+  }
+  
+  .custom-contact-banner__content {
+    padding-bottom: 40px;
+  }
+
+  .custom-contact-faq-section {
+    flex-direction: column;
+    gap: 30px;
+    margin-top: 60px;
+  }
+
+  .custom-contact-faq__header {
+    flex: none;
+    padding-right: 0;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .custom-contact-banner {
+    height: 450px;
+  }
+
+  .custom-contact-container {
+    padding: 0 20px 40px 20px;
+  }
+
+  .custom-contact-banner__content-wrapper {
+    padding: 0 20px;
+  }
+
+  .custom-contact-banner__heading {
+    font-size: 42px;
+  }
+
+  .custom-contact-banner__content {
+    padding-bottom: 30px;
+  }
+
+  .custom-contact-info {
+    display: flex;
+    flex-direction: column;
+    padding: 40px 0;
+    gap: 30px;
+  }
+
+  .custom-contact-info__item {
+    align-items: flex-start;
+    justify-self: auto;
+    padding-left: 0 !important;
+  }
+  
+  .custom-contact-info__divider {
+    display: none;
+  }
+
+  .custom-contact-faq-section {
+    margin-top: 40px;
+  }
+  
+  .custom-contact-faq__title {
+    font-size: 28px;
+  }
+}
+</style>

@@ -1,0 +1,99 @@
+<disclosure-element class="disclosure" data-disclosure-locale>
+    <button type="button" class="disclosure__toggle" aria-expanded="false" aria-controls="lang-list-{{ input_prefix }}" aria-describedby="lang-heading-{{ input_prefix }}" data-disclosure-toggle>
+        {{ button_content }}
+    </button>
+    <ul id="lang-list-{{ input_prefix }}" class="disclosure-list" data-disclosure-list>
+        {{ list_content }}
+    </ul>
+    <input type="hidden" name="locale_code" value="{{ localization.language.iso_code }}" data-disclosure-input/>
+</disclosure-element>
+{% stylesheet %}
+.outlined-disclosure{
+    position: relative;
+}
+    .disclosure{
+        /* position: relative; */
+    }
+    .disclosure__toggle {
+        display: flex;
+        align-items: center;
+        padding: 0.75em 1em;
+        border: 1.5px solid;
+        background-color: #ffffff;
+        color: var(--brand-primary-color, #000);
+        font-size: inherit;
+        line-height: 1.2em;
+        letter-spacing: 0;
+        text-transform: none;
+        text-align: inherit;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    .outlined-disclosure .disclosure__toggle {
+        background: transparent;
+        border: none;
+        color: inherit;
+        font-size: 12px;
+        line-height: 100%;
+        margin: 0;
+        padding: 5px 0;
+        vertical-align: middle;
+        display: flex;
+        align-items: center;
+        grid-gap: 10px;
+    }
+    .disclosure__toggle-icon{
+        width: auto;
+        height: 20px;
+        object-fit: contain;
+    }
+    .disclosure-list {
+        background-color: #ffffff;
+        color: var(--brand-primary-color, #000);
+        bottom: calc(100% - 1px);
+        position: absolute;
+        min-height: 40px;
+        max-height: 300px;
+        overflow-y: auto;
+        margin: 0;
+        padding: 0;
+        max-width: 80vw;
+        width: max-content;
+        box-shadow: 0 6px 12px 1px rgba(0, 0, 0, 0.12);
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 250ms ease, visibility 250ms;
+    }
+    .disclosure-list--visible {
+        visibility: visible;
+        opacity: 1;
+    }
+    .disclosure-list__option {
+        display: block;
+        padding: 9px 15px;
+        padding-inline-end: 40px;
+        line-height: 1.4em;
+        transition: background-color 0.3s ease-out;
+    }
+    .disclosure-list__option:hover {
+        background-color: #0001;
+    }
+    .disclosure-list__item {
+        text-align: start;
+        list-style: none;
+    }
+    .disclosure-list__item:first-child .disclosure-list__option {
+        padding-top: 12px;
+    }
+    .disclosure__toggle-arrow svg{
+        transition: transform 0.2s ease-out;
+    }
+    .disclosure__toggle[aria-expanded="true"] .disclosure__toggle-arrow svg{
+        transform: rotate(180deg);
+    }
+    @media (min-width: 768px) {
+        .disclosure-list__item--current .disclosure-list__option {
+            background-color: var(--brand-primary-color-contrast, #FFF);
+        }
+    }
+{% endstylesheet %}

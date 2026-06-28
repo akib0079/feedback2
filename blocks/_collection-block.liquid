@@ -1,0 +1,133 @@
+<script type="text/template" data-offset="{{ block.settings.offset }}" class="injected-block-template" id="injected-block-template-{{block.id}}">
+<div class="collection__block{% if block.settings.with_overlay %} with-overlay{% endif %}" {{ block.shopify_attributes }}>
+    <div class="collection__block_row">
+    <div class="collection__block_content">
+    {% if block.settings.title != blank %}
+        <h4 class="collection__block-title">{{ block.settings.title }}</h4>
+    {% endif %}
+    {% if block.settings.desc != blank %}
+        <div class="collection__block-desc desc">{{ block.settings.desc }}</div>
+    {% endif %}
+    </div>
+    </div>
+    {% if block.settings.img != blank %}
+        {{ block.settings.img | image_url: width: nil | image_tag: class: 'collection__block-img bg-img hidden--mobile' }}
+        {{ block.settings.img_mobile | default: block.settings.img | image_url: width: nil | image_tag: class: 'collection__block-img bg-img hidden--desktop' }}
+    {% else %}
+        {{ 'image' | placeholder_svg_tag: 'collection__block-img bg-img placeholder' }}
+    {% endif %}
+</div>
+</script>
+{% stylesheet %}
+ .collection__block {
+    height: 100%;
+    background: #F4F4F4;
+    color: #FFF;
+    position: relative;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    z-index: 1;
+    grid-column: span 2;
+    min-height: 389px;
+    @media screen and (max-width: 1200px) {
+        grid-row: 3;
+    }
+    &.with-overlay::before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(180deg,#6660,#00000080);
+    }
+  }
+  .collection__block_row{
+    display: flex;
+    justify-content: space-between;
+    grid-gap: 30px;
+    align-items: flex-end;
+  }
+  .collection__block-title {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 100%;
+    margin: 0;
+    max-width: 530px;
+    @media screen and (max-width: 749px) {
+      /* font-size: 20px; */
+    }
+  }
+  .collection__block-desc{
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 150%;
+  }
+  .collection__block .placeholder{
+    background-color: #a1a1a180;
+  }
+  .collection__block-img{
+    transition: transform 0.3s ease-out;
+    z-index: -2;
+  }
+  .collection__block:hover .collection__block-img{
+    transform: scale(1.05);
+  }
+{% endstylesheet %}
+{% schema %}
+{
+    "name": "Collection Banner",
+    "settings": [
+        {
+            "type": "inline_richtext",
+            "id": "title",
+            "label": "Title",
+            "default": "Performance activewear with a timeless look",
+            },
+        {
+            "type": "richtext",
+            "id": "desc",
+            "label": "Description",
+            "default": "<p>Designed for comfort, performance, and style on every run down the mountain.</p>"
+        },
+        {
+            "type": "url",
+            "id": "btn_url",
+            "label": "Button URL",
+            "default": "/collections/all",
+        },
+        {
+            "type": "image_picker",
+            "id": "img",
+            "label": "Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "img_mobile",
+            "label": "Image mobile"
+        },
+        {
+            "type": "number",
+            "id": "offset",
+            "label": "Product offset",
+            "default": 8
+        },
+        {
+            "type": "checkbox",
+            "id": "with_overlay",
+            "label": "With overlay",
+            "default": true,
+        },
+    ],
+    "presets": [
+        {
+        "name": "Collection Banner",
+        "category": "t:categories.collection"
+        }
+    ]
+}
+{% endschema %}

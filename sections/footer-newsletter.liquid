@@ -1,0 +1,122 @@
+
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<div
+  class="footer-newsletter__content-wrap section section--page-width color-{{ section.settings.color_scheme }}"
+>
+  <div class="footer-newsletter__content">
+    {% if section.settings.title != blank %}
+        <h4 class="footer-newsletter__title">{{ section.settings.title }}</h4>
+    {% endif %}
+    {% form 'customer', class: 'footer-newsletter__form' %}
+        <div class="footer-newsletter__form-wrap">
+            <label for="footer-newsletter-email">{{'blocks.email_signup.label' | t}}</label>
+            <input type="email" id="footer-newsletter-email" name="contact[email]" placeholder="{{'blocks.email_signup.placeholder' | t}}" />
+            <input type="submit" value="{{'actions.sign_up' | t}}" />
+        </div>
+    {% endform %}
+  </div>
+</div>
+
+{% stylesheet %}
+    .footer-newsletter__content-wrap{
+        border-bottom: 1px solid #0000000D;
+    }
+    .footer-newsletter__content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 38px 0;
+        grid-gap: 20px;
+        @media screen and (max-width: 749px) {
+            padding: 30px 0;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+    .footer-newsletter__title {
+        font-size: 20px;
+        margin: 0;
+        font-family: var(--font-body--family);
+        @media screen and (max-width: 749px) {
+            padding: 18px 0;
+        }
+    }
+    .footer-newsletter__form{
+        @media screen and (max-width: 749px) {
+            width: 100%;
+        }
+    }
+    .footer-newsletter__form-wrap{
+        height: 40px;
+        display: flex;
+        width: 330px;
+        label{
+            display: none;
+        }
+        input[type="email"]{
+            background: #F1F1F1;
+            border: none;
+            height: 100%;
+            flex-grow: 1;
+            padding: 10px;
+            border-radius: 0;
+            outline: none;
+        }
+        input[type="email"]::placeholder{
+            font-size: 12px;
+            color: #00000080;
+        }
+        input[type="submit"]{
+            background-color: var(--color-primary-button-background);
+            color: var(--color-primary-button-text);
+            height: 100%;
+            min-width: 88px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease-out;
+            transition-property: background-color, color;
+            &:hover{
+                background-color: var(--color-primary-button-hover-background);
+                color: var(--color-primary-button-hover-text);
+            }
+        }
+        @media screen and (max-width: 749px) {
+            input[type="email"]{
+                width: auto;
+                flex-grow: 1;
+            }
+        }
+    }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer Newsletter",
+  "class": "footer-newsletter-section",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Title",
+        "default": "Stay up to date with Ziener"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-4",
+      "label": "t:settings.color_scheme"
+    },
+  ],
+  "presets": [
+    {
+      "name": "Footer Newsletter"
+    }
+  ]
+}
+{% endschema %}

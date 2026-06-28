@@ -1,0 +1,89 @@
+<a class="tab-item__header" href="#" data-anchor="{{ block.id }}">{{block.settings.title}}</a>
+===========================================
+<div class="tab-item__content" data-anchor="{{ block.id }}" {{ block.shopify_attributes }}>
+    {% content_for 'blocks' %}
+</div>
+===========================================
+{% stylesheet %}
+.tab-item__header{
+    flex-basis: 100%;
+    background: #F2F2F2;
+    min-height: 50px;
+    padding: 10px 20px; 
+    line-height: 98%;
+    letter-spacing: -0.28px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    border: 1px solid #F2F2F2;
+    transition: border-color 0.3s ease-out;
+    &.active{
+        border-color: #000;
+    }
+}
+.tab-item__content{
+    display: none;
+    height: 100%;
+    interpolate-size: allow-keywords;
+    transition: height 0.3s ease-out, display 0.3s ease-out discrete;
+    &.active{
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+    @starting-style {
+        .tab-item__content.active{
+            display: flex;
+            height: auto;
+        }
+    }
+    
+}
+{% endstylesheet %}
+{% schema %}
+{
+  "name": "Tab Item",
+  "tag": null,
+  "class": "tab__item",
+  "settings": [
+    {
+        "type": "inline_richtext",
+        "id": "title",
+        "label": "Label",
+        "default": "Product care"
+    }
+  ],
+  "blocks": [{"type": "@theme"}],
+  "presets": [
+    {
+      "name": "Tab Item",
+      "blocks": [{
+            "type": "text",
+            "name": "t:names.text",
+            "settings": {
+            "text": "<p>We make things that work better and last longer. Our products solve real problems with clean design and honest materials.</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "alignment": "left",
+            "type_preset": "rte",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+            },
+        }]
+    }
+  ]
+}
+{% endschema %}

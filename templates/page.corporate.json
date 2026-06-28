@@ -1,0 +1,55 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page-corporate",
+      "blocks": {
+        "title_block_f8jcAb": {
+          "type": "title_block",
+          "settings": {
+            "title": "Environmental responsibility"
+          }
+        },
+        "image_block_i473CW": {
+          "type": "image_block",
+          "settings": {
+            "image": "shopify://shop_images/image_12.png",
+            "image_url": "",
+            "img_width": 220,
+            "img_height": 115
+          }
+        },
+        "text_block_pftPnj": {
+          "type": "text_block",
+          "settings": {
+            "text": "<p>bluesign is a comprehensive solution provider for the textile industry, enabling sustainable practices throughout the supply chain. Based on a holistic approach, bluesign follows each textile product right  along its production process and makes improvements at every stage – from manufacturing to the final product. Resource efficiency, consumer  safety, air and water pollution as well as occupational health and safety are monitored. In its role as a solution provider and knowledge mediator, bluesign acts as an independent assessor to ensure trust and transparency. We have entered into this important partnership with bluesign to make our future collections even more environmentally sustainable.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "title_block_f8jcAb",
+        "image_block_i473CW",
+        "text_block_pftPnj"
+      ],
+      "settings": {
+        "heading": "Corporate responsibility",
+        "image_desktop_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_018916f7-48fe-4bd8-a575-9d9e22765287.png?v=1782160050",
+        "image_mobile_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner-mobile_6f648922-48da-47c5-b1d3-dd10fd1ddf96.png?v=1782160049",
+        "banner_height_desktop": 410,
+        "banner_height_mobile": 290,
+        "intro_text": "<p>At ZIENER, we love winter sports and exercise in the great outdoors. It is therefore only natural that we want to preserve this nature. In addition to our commitment at a local level in our home town of Oberammergau, we have been dedicated to ecological and social issues for several years by processing environmentally friendly materials, supporting climate protection projects and advocating fair working conditions. In detail, this means that ZIENER is using more and more recycled fabrics, renewable, natural materials and PFAS-free impregnations.</p>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

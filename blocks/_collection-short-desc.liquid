@@ -1,0 +1,129 @@
+{% if block.settings.desc != blank %}
+<div class="collection-short-desc collapsed block-id-{{ block.id }}" {{block.shopify_attributes}}>
+  <span class="collection-short-desc__text" >{{block.settings.desc}}</span>
+  <button class="collection-short-desc__button">
+    <span class="collection-short-desc__button_label">{{block.settings.read_more}}</span>
+    <span class="collection-short-desc__button_icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="6" viewBox="0 0 11 6" fill="none">
+        <path d="M0.5 0.5L5.50081 5.08L10.5 0.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </span>
+  </button>
+</div>
+<script>
+    const block = document.querySelector('.collection-short-desc.block-id-{{ block.id }}');
+    const btn = block.querySelector('.collection-short-desc__button');
+    const label = btn.querySelector('.collection-short-desc__button_label');
+    const text = block.querySelector('.collection-short-desc__text');
+
+    const style = window.getComputedStyle(text);
+    const currentFontSize = parseFloat(style.fontSize);
+    const twoEmInPixels = currentFontSize * 3;
+    if(text.offsetHeight > twoEmInPixels){
+        block.classList.add("collapsible");
+        btn.addEventListener('click', () => {
+            const isCollapsed = block.classList.toggle('collapsed');
+            btn.classList.toggle('open');
+            label.textContent = isCollapsed ? '{{block.settings.read_more}}' : '{{block.settings.read_less}}';
+        });
+    }
+</script>
+{% endif %}
+{% stylesheet %}
+.collection-short-desc{
+    overflow: hidden;
+    line-height: 1.5em;
+    position: relative;
+    max-width: 750px;
+    font-size: 16px;
+    interpolate-size: allow-keywords;
+    transition: height 0.3s ease-out;
+    @media screen and (max-width: 749px){
+        font-size: 14px;
+        &.collapsible{
+            &.collapsed{
+                height: 3em;
+            }
+        }
+    }
+}
+ .collection-short-desc__text {
+    @media screen and (max-width: 749px){
+        .collection-short-desc.collapsible &{
+            padding-inline-end: 100px;
+        }
+    }
+}
+.collection-short-desc__button{
+    background: none;
+    border: none;
+    color: #9E9E9E;
+    line-height: inherit;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding-left: 0;
+    align-items: center;
+    display: none;
+    background: var(--color-background);
+    &::before{
+        content: '...';
+        color: var(--color-foreground);
+        padding-inline-end: 10px;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.3s ease-out;
+        transition-property: visibility, opacity;
+    }
+    @media screen and (max-width: 749px){
+        .collection-short-desc.collapsible &{
+            display: inline-flex;
+        }
+        .collection-short-desc.collapsed  &::before{
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}
+.collection-short-desc__button_icon{
+    margin-inline-start: 10px;
+    margin-block-start: 2px;
+    transform: rotate(180deg);
+    transition: 0.3s ease-out;
+    transition-property: transform;
+    .collection-short-desc.collapsed &{
+        transform: rotate(0deg);
+    }
+}
+{% endstylesheet %}
+{% schema %}
+{
+    "name": "Collection Short Desc",
+    "settings": [
+        {
+            "type": "richtext",
+            "id": "desc",
+            "label": "Description",
+            "default": "<p>Designed for comfort, performance, and style on every run down the mountain.</p>"
+        },
+        {
+            "type": "inline_richtext",
+            "id": "read_more",
+            "label": "Read more label",
+            "default": "Read more",
+        },
+        {
+            "type": "inline_richtext",
+            "id": "read_less",
+            "label": "Read less label",
+            "default": "Read less",
+        },
+    ],
+    "presets": [
+        {
+        "name": "Collection Short Desc",
+        "category": "t:categories.collection"
+        }
+    ]
+}
+{% endschema %}

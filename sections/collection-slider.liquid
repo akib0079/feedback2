@@ -1,0 +1,300 @@
+
+<div class="section-id-{{ section.id }}  section section--full-width-margin section--page-width color-{{ section.settings.color_scheme }}">
+  
+    <div class="collection-slider__nav-row">
+    {% if section.settings.title != blank %}
+      <h2 class="section-title collection-slider__title h3{% unless section.settings.show_title %} visually-hidden{% endunless %}">{{ section.settings.title | escape }}</h2>
+    {% endif %}
+    <div class="collection-slider__nav-right-col">
+      <div class="collection-slider__nav-wrap">
+        <div class="collection-slider__nav prev">
+          {% render 'svg-slider-arrow' %}
+        </div>
+        <div class="collection-slider__nav next">
+          {% render 'svg-slider-arrow' %}
+        </div>
+      </div>
+      {%if section.settings.header_link_text != blank %}
+      <a class="collection-slider__coll_link" href="{{ section.settings.header_link | default: routes.all_products_collection_url }}">
+        {{ section.settings.header_link_text }}
+      </a>
+      {% endif %}
+    </div>
+  </div>
+    <div class="collection-slider swiper">
+    <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+              {% if block.settings.url != blank %}
+                <a href="{{ block.settings.url }}">
+              {% endif %}
+             <div class="collection-slider__block{% if block.settings.overlay %} with-overlay{%endif %}">
+              {% if block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: nil | image_tag: class: "collection-slider__slide_image hidden--mobile" }}
+                {{ block.settings.image_mobile | default: block.settings.image | image_url: width: nil | image_tag: class: "collection-slider__slide_image mobile-only  hidden--desktop" }}
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: "collection-slider__slide_image placeholder" }}
+              {% endif %}
+              <h4 class="collection-slider__slide_title h4">{{ block.settings.title }}</h4>
+              </div>
+              {% if block.settings.url != blank %}
+                </a>
+              {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="swiper-scrollbar" style="--swiper-scrollbar-sides-offset: 0%; --swiper-scrollbar-size: 1px; --swiper-scrollbar-bottom 0px"></div>
+  </div>
+</div>
+<script>
+   document.addEventListener("DOMContentLoaded", () => {
+      new Swiper('.section-id-{{ section.id }} .collection-slider', {
+        slidesPerView: 'auto',
+        freeMode: {
+          enabled: true,
+          sticky: true,
+          momentumRatio: 0.8,
+        },
+        speed: 400,
+        navigation: {
+          nextEl: '.section-id-{{ section.id }} .collection-slider__nav.next',
+          prevEl: '.section-id-{{ section.id }} .collection-slider__nav.prev',
+        },
+        scrollbar: {
+          el: '.section-id-{{ section.id }} .swiper-scrollbar',
+          draggable: true
+        },
+      });
+  });
+</script>
+{% stylesheet %}
+  .section-collection-slider{
+        padding: 72px 0 96px;
+        overflow: hidden;
+    }
+.collection-slider__nav-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-gap: 8px;
+  margin-bottom: 40px;
+}
+.section-collection-slider .collection-slider__title{
+  margin: 0;
+  line-height: 150%;
+}
+.collection-slider__nav-right-col{
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  grid-gap: 35px;
+}
+.collection-slider__nav-wrap{
+  display: flex;
+  grid-gap: 48px;
+  width: 80px;
+}
+.collection-slider__nav-wrap.inactive{
+  display: none;
+}
+.collection-slider__nav {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+  /* width: 50%; */
+  transition: width 0.4s ease-out;
+  cursor: pointer;
+}
+.collection-slider__nav.prev {
+  transform: rotateY(-180deg);
+}
+.collection-slider__nav.swiper-button-disabled{
+  opacity: 0.5;
+  cursor: auto;
+  width: 30%;
+}
+.collection-slider__nav svg{
+  width: 16px;
+  height: auto;
+  flex-shrink: 0;
+}
+.collection-slider__coll_link {
+  font-weight: 500;
+  text-transform: uppercase;
+  position: relative;
+}
+.collection-slider__coll_link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 1px;
+    bottom: 2px;
+    left: 0;
+    background-color: currentColor;
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+}
+.collection-slider__coll_link:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+    .collection-slider{
+        padding-bottom: 32px;
+        overflow: visible;
+        width: 100%;
+        --gap: 16px;
+        margin: 0 calc(-1 * var(--gap) / 2);
+        .swiper-scrollbar{
+            --swiper-scrollbar-bg-color: #EEEEEE;
+            --swiper-scrollbar-drag-bg-color: #000000;
+            --swiper-scrollbar-sides-offset: calc(var(--gap) / 2) !important;
+            --swiper-scrollbar-border-radius: 0;
+            --swiper-scrollbar-bottom: 0;
+        }
+    }
+    .collection-slider .swiper-slide{
+    width: 365px;
+    }
+.collection-slider__block {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex-basis: 100%;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  padding: 31px 28px;
+    height: 506px;
+  margin: 0 calc(var(--gap) / 2);
+  color: var(--color-background);
+}
+.collection-slider__block.with-overlay::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  z-index: -1;
+  opacity: 0.5;
+  background: linear-gradient(180deg,#00000000 30%,#000 100%);
+}
+.collection-slider__slide_image{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  object-fit: cover;
+  transition: transform 0.5s ease-out;
+}
+.collection-slider__slide_image.placeholder {
+  background: #EEE;
+}
+.collection-slider__block:hover .collection-slider__slide_image{
+  transform: scale(1.05);
+}
+{% endstylesheet %}
+{% schema %}
+  {
+    "name": "Collection Slider",
+    "class": "section-collection-slider",
+    "disabled_on": {
+      "templates": [
+        "password"
+      ],
+      "groups": [
+        "aside"
+      ]
+    },
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Collections"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_title",
+        "label": "Show heading",
+        "info": "A hidden heading will still be readable by search engines and screen readers",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "header_link_text",
+        "label": "Header Link - text",
+        "info": "A hidden heading will still be readable by search engines and screen readers",
+      },
+      {
+        "type": "url",
+        "id": "header_link",
+        "label": "Header Link - URL"
+      },
+        {
+            "type": "color_scheme",
+            "id": "color_scheme",
+            "default": "scheme-4",
+            "label": "t:settings.color_scheme"
+        },
+    ],
+    "blocks": [
+      {
+        "type": "slide-block",
+        "name": "Slide Block",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Gloves"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "URL"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Mobile image"
+          },
+          {
+            "type": "checkbox",
+            "id": "overlay",
+            "label": "Image Overlay",
+            "info": "Transparent Black Overlay",
+            "default": true
+          },
+        ]
+      },
+    ],
+    "presets": [
+      {
+        "name": "Blocks Slider",
+        "blocks": [
+          {
+            "type": "slide-block"
+          },
+          {
+            "type": "slide-block"
+          },
+          {
+            "type": "slide-block"
+          },
+          {
+            "type": "slide-block"
+          },
+        ]
+      },
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,372 @@
+<div class="cr-page">
+  <!-- Banner -->
+  {% assign desktop_img_url = section.settings.image_desktop_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_018916f7-48fe-4bd8-a575-9d9e22765287.png?v=1782160050' %}
+  {% assign mobile_img_url = section.settings.image_mobile_url | default: 'https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner-mobile_6f648922-48da-47c5-b1d3-dd10fd1ddf96.png?v=1782160049' %}
+
+  <div class="cr-banner">
+    <div class="cr-banner__image-wrapper">
+      {% if section.settings.image_desktop != blank %}
+        <img src="{{ section.settings.image_desktop | image_url: width: 2500 }}" alt="{{ section.settings.heading | escape }}" class="cr-banner__img cr-desktop-only" loading="eager">
+      {% else %}
+        <img src="{{ desktop_img_url }}" alt="{{ section.settings.heading | escape }}" class="cr-banner__img cr-desktop-only" loading="eager">
+      {% endif %}
+
+      {% if section.settings.image_mobile != blank %}
+        <img src="{{ section.settings.image_mobile | image_url: width: 800 }}" alt="{{ section.settings.heading | escape }}" class="cr-banner__img cr-mobile-only" loading="eager">
+      {% else %}
+        <img src="{{ mobile_img_url }}" alt="{{ section.settings.heading | escape }}" class="cr-banner__img cr-mobile-only" loading="eager">
+      {% endif %}
+    </div>
+    <div class="cr-banner__overlay"></div>
+    {% if section.settings.heading != blank %}
+      <div class="cr-banner__content cr-container">
+        <h1 class="cr-banner__heading">{{ section.settings.heading }}</h1>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Intro Paragraph -->
+  {% if section.settings.intro_text != blank %}
+    <div class="cr-intro">
+      <div class="cr-container">
+        <div class="cr-intro__text">{{ section.settings.intro_text }}</div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Content Blocks -->
+  <div class="cr-content">
+    <div class="cr-container">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'title_block' %}
+            <div class="cr-block cr-block--title" {{ block.shopify_attributes }}>
+              <h2 class="cr-block__title">{{ block.settings.title }}</h2>
+            </div>
+
+          {% when 'image_block' %}
+            <div class="cr-block cr-block--image" {{ block.shopify_attributes }}>
+              {% assign block_img = block.settings.image_url %}
+              {% if block.settings.image != blank %}
+                {% assign img_alt = block.settings.image.alt | default: 'Image' %}
+                {% if block.settings.image.src contains '.svg' %}
+                  <img src="{{ block.settings.image | image_url }}" alt="{{ img_alt }}" class="cr-block__img" loading="lazy" style="max-width: {{ block.settings.img_width }}px; max-height: {{ block.settings.img_height }}px;">
+                {% else %}
+                  <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ img_alt }}" class="cr-block__img" loading="lazy" style="max-width: {{ block.settings.img_width }}px; max-height: {{ block.settings.img_height }}px;">
+                {% endif %}
+              {% elsif block_img != blank %}
+                <img src="{{ block_img }}" alt="Image" class="cr-block__img" loading="lazy" style="max-width: {{ block.settings.img_width }}px; max-height: {{ block.settings.img_height }}px;">
+              {% endif %}
+            </div>
+
+          {% when 'text_block' %}
+            <div class="cr-block cr-block--text" {{ block.shopify_attributes }}>
+              <div class="cr-block__text">{{ block.settings.text }}</div>
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Styles -->
+<style>
+  #shopify-section-{{ section.id }} .cr-banner {
+    min-height: {{ section.settings.banner_height_desktop }}px;
+  }
+  @media screen and (max-width: 990px) {
+    #shopify-section-{{ section.id }} .cr-banner {
+      min-height: {{ section.settings.banner_height_mobile }}px;
+    }
+  }
+</style>
+
+<style>
+/* Global */
+.cr-page {
+  width: 100%;
+  overflow-x: hidden;
+  color: #000;
+  padding-bottom: 80px;
+}
+.cr-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 8px;
+  width: 100%;
+}
+.cr-desktop-only { display: block !important; }
+.cr-mobile-only { display: none !important; }
+
+@media screen and (max-width: 767px) {
+  .cr-container { padding: 0 20px; }
+  .cr-desktop-only { display: none !important; }
+  .cr-mobile-only { display: block !important; }
+}
+
+/* Banner */
+.cr-banner {
+  position: relative;
+  width: 100%;
+  min-height: 409px;
+  display: flex;
+  align-items: flex-end;
+}
+.cr-banner__image-wrapper {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;
+}
+.cr-banner__img {
+  width: 100%; height: 100%; object-fit: cover;
+}
+.cr-banner__overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.35) 100%);
+  z-index: 1;
+}
+.cr-banner__content {
+  position: relative; z-index: 2;
+  padding-bottom: 40px;
+}
+.cr-banner__heading {
+  color: #FFF;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 100px;
+  margin: 0;
+}
+
+/* Intro Paragraph */
+.cr-intro {
+  padding: 100px 0 40px 0px;
+}
+.cr-intro__text {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+/* Content Blocks */
+.cr-content {
+  padding-bottom: 40px;
+}
+.cr-block {
+  margin-bottom: 30px;
+}
+.cr-block:last-child {
+  margin-bottom: 0;
+}
+.cr-block--title {
+  margin-bottom: 20px;
+}
+.cr-block__title {
+  color: #000;
+  font-family: "Ziener Helvetica", Arial, sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  margin: 0 0 30px 0;
+}
+.cr-block--image {
+  margin-bottom: 30px;
+}
+.cr-block__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.cr-block--text {
+  margin-bottom: 30px;
+}
+.cr-block__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.cr-block__text {
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+/* Mobile Breakpoints */
+@media screen and (max-width: 990px) {
+  .cr-page {
+    padding-bottom: 40px;
+  }
+  .cr-banner {
+    min-height: 290px;
+  }
+  .cr-banner__content {
+    padding-bottom: 30px;
+  }
+  .cr-banner__heading {
+    font-size: 48px;
+    line-height: 100%;
+  }
+  .cr-intro {
+    padding: 60px 0;
+  }
+  .cr-block {
+    margin-bottom: 40px;
+  }
+  .cr-block__title {
+    font-size: 18px;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Corporate Responsibility",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Banner Heading",
+      "default": "Corporate responsibility"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Banner Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "image_desktop_url",
+      "label": "Fallback Desktop Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_018916f7-48fe-4bd8-a575-9d9e22765287.png?v=1782160050"
+    },
+    {
+      "type": "text",
+      "id": "image_mobile_url",
+      "label": "Fallback Mobile Image URL",
+      "default": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner-mobile_6f648922-48da-47c5-b1d3-dd10fd1ddf96.png?v=1782160049"
+    },
+    {
+      "type": "header",
+      "content": "Banner Dimensions"
+    },
+    {
+      "type": "range",
+      "id": "banner_height_desktop",
+      "min": 200,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "label": "Desktop Banner Height",
+      "default": 410
+    },
+    {
+      "type": "range",
+      "id": "banner_height_mobile",
+      "min": 150,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile Banner Height",
+      "default": 290
+    },
+    {
+      "type": "header",
+      "content": "Intro Paragraph"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text",
+      "label": "Intro Text",
+      "default": "<p>At ZIENER, we love winter sports and exercise in the great outdoors. It is therefore only natural that we want to preserve this nature. In addition to our commitment at a local level in our home town of Oberammergau, we have been dedicated to ecological and social issues for several years by processing environmentally friendly materials, supporting climate protection projects and advocating fair working conditions. In detail, this means that ZIENER is using more and more recycled fabrics, renewable, natural materials and PFAS-free impregnations.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "title_block",
+      "name": "Title",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Environmental responsibility"
+        }
+      ]
+    },
+    {
+      "type": "image_block",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_url",
+          "label": "Fallback Image URL"
+        },
+        {
+          "type": "range",
+          "id": "img_width",
+          "min": 50,
+          "max": 500,
+          "step": 5,
+          "unit": "px",
+          "label": "Image Max Width",
+          "default": 305
+        },
+        {
+          "type": "range",
+          "id": "img_height",
+          "min": 20,
+          "max": 500,
+          "step": 5,
+          "unit": "px",
+          "label": "Image Max Height",
+          "default": 200
+        }
+      ]
+    },
+    {
+      "type": "text_block",
+      "name": "Content",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Paragraph Text",
+          "default": "<p>Add your content here.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Corporate Responsibility",
+      "blocks": [
+        { "type": "title_block" },
+        { "type": "image_block" },
+        { "type": "text_block" },
+        { "type": "title_block" },
+        { "type": "image_block" },
+        { "type": "text_block" }
+      ]
+    }
+  ]
+}
+{% endschema %}

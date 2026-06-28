@@ -1,0 +1,105 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "contact-custom": {
+      "type": "contact-page-custom",
+      "blocks": {
+        "contact_info_1": {
+          "type": "contact_info",
+          "settings": {
+            "icon_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/marker-02.svg?v=1781546115",
+            "label": "Adress",
+            "text": "Schwedenqasse 5 | D-82487 Oberammergau",
+            "link": ""
+          }
+        },
+        "contact_info_2": {
+          "type": "contact_info",
+          "settings": {
+            "icon_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/phone.svg?v=1781546114",
+            "label": "Phone",
+            "text": "+49 8822 9206-0",
+            "link": "tel:+49 8822 9206-0"
+          }
+        },
+        "contact_info_3": {
+          "type": "contact_info",
+          "settings": {
+            "icon_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/send-01.svg?v=1781546114",
+            "label": "E-mail",
+            "text": "info@ziener.de",
+            "link": "mailto:info@ziener.de"
+          }
+        },
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What do I do if I have a complaint?",
+            "answer": "<p>Please contact our customer service team with your order details and photos of the issue.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long is the guarantee (warranty for defects)?",
+            "answer": "<p>We offer a standard 2-year warranty on all products against manufacturing defects.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What should I do if I don't have the till receipt anymore?",
+            "answer": "<p>If you purchased directly from us, we can often find your order using your email address or phone number.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I order spare parts or single gloves?",
+            "answer": "<p>Spare parts availability depends on the product. Please reach out to support for specific requests.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How do I look after my ZIENER products?",
+            "answer": "<p>Care instructions are included on the product tags. Generally, we recommend gentle washing and air drying.</p>"
+          }
+        },
+        "faq_6": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Where can I buy ZIENER products?",
+            "answer": "<p>You can purchase directly from our website or from authorized retailers listed on our Store Locator page.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "contact_info_1",
+        "contact_info_2",
+        "contact_info_3",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6"
+      ],
+      "settings": {
+        "banner_heading": "Get in touch with us",
+        "faq_heading": "Frequently Asked Questions"
+      }
+    }
+  },
+  "order": [
+    "contact-custom"
+  ]
+}
