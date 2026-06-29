@@ -12,24 +12,83 @@
     "main": {
       "type": "page-declaration",
       "blocks": {
-        "link_1": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_2": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_3": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_4": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_5": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_6": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_7": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } },
-        "link_8": { "type": "pdf_link", "settings": { "title": "MANU AS® JUNIOR" } }
+        "link_1": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_2": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_3": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_4": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_5": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_6": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_7": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        },
+        "link_8": {
+          "type": "pdf_link",
+          "settings": {
+            "title": "MANU AS® JUNIOR",
+            "link_url": ""
+          }
+        }
       },
-      "block_order": ["link_1", "link_2", "link_3", "link_4", "link_5", "link_6", "link_7", "link_8"],
+      "block_order": [
+        "link_1",
+        "link_2",
+        "link_3",
+        "link_4",
+        "link_5",
+        "link_6",
+        "link_7",
+        "link_8"
+      ],
       "settings": {
         "heading": "Declaration of conformity",
         "image_desktop_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-banner_3af6cbd1-2dc7-4afd-ac2b-b82281592d68.png?v=1782189348",
         "image_mobile_url": "https://cdn.shopify.com/s/files/1/0999/0701/0937/files/Container-mobile.png?v=1782189347",
-        "banner_height_desktop": 410,
+        "banner_height_desktop": 600,
         "banner_height_mobile": 290
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
