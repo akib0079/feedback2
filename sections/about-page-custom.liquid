@@ -67,7 +67,8 @@
           <div class="custom-about-container custom-about-split-text__container custom-about-split-text__container--{{ block.settings.layout | default: 'split' }}">
             <div class="custom-about-split-text__left">
               {% if block.settings.heading != blank %}
-                <h2 class="custom-about-split-text__heading">{{ block.settings.heading }}</h2>
+                <h2 class="custom-about-split-text__heading desktop-only">{{ block.settings.heading }}</h2>
+                <h2 class="custom-about-split-text__heading mobile-only">{{ block.settings.heading_mobile | default: block.settings.heading }}</h2>
               {% endif %}
             </div>
             <div class="custom-about-split-text__right">
@@ -368,7 +369,9 @@
   }
   .custom-about-centered {
     margin: 0;
-    padding: 60px 30px;
+    padding: 00px 30px;
+    padding-top: 0px;
+    padding-bottom: 0px;
   }
   .custom-about-centered__wrapper {
     text-align: center;
@@ -446,6 +449,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 150%;
+    text-align: left;
   }
   .custom-about-page p,
   .custom-about-centered__text,
@@ -457,7 +461,8 @@
     line-height: 150%;
     color: #000;
     margin-top: 0;
-    margin-bottom: 0px;
+    margin-bottom: 20px;
+    text-align: center !important;
   }
 }
 </style>
@@ -732,6 +737,11 @@
           "id": "heading",
           "label": "Heading",
           "default": "Performance, comfort & style since 1946"
+        },
+        {
+          "type": "text",
+          "id": "heading_mobile",
+          "label": "Heading (Mobile)"
         },
         {
           "type": "richtext",
