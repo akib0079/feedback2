@@ -12,10 +12,12 @@
     "main": {
       "type": "article-custom",
       "settings": {
-        "banner_height_desktop": 410,
+        "banner_height_desktop": 600,
         "banner_height_mobile": 290
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }
