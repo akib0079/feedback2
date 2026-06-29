@@ -61,7 +61,7 @@
 
                 <!-- Read More -->
                 <span class="blog-custom-card__readmore">
-                  Read more
+                  <span class="blog-custom-card__readmore-text">Read more</span>
                   <img src="https://cdn.shopify.com/s/files/1/0999/0701/0937/files/arrow-down-right-sm.svg?v=1782191403" alt="Arrow" width="16" height="16" class="blog-custom-card__readmore-arrow">
                 </span>
               </div>
@@ -252,18 +252,7 @@
   line-height: 120%;
   text-transform: uppercase;
   margin: 0;
-}
-.blog-custom-card__title-text {
-  background-image: linear-gradient(currentColor, currentColor);
-  background-position: 0% 100%;
-  background-repeat: no-repeat;
-  background-size: 0% 1.5px;
-  transition: background-size 0.3s ease;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-.blog-custom-card:hover .blog-custom-card__title-text {
-  background-size: 100% 1.5px;
+  min-height: 57px;
 }
 
 /* Excerpt */
@@ -288,6 +277,18 @@
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+}
+.blog-custom-card__readmore-text {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0% 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.3s ease;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.blog-custom-card:hover .blog-custom-card__readmore-text {
+  background-size: 100% 1px;
 }
 .blog-custom-card__readmore-arrow {
   width: 16px;
