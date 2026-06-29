@@ -29,7 +29,7 @@
         </div>
 
       {% when 'centered_text' %}
-        <div class="custom-about-centered" {{ block.shopify_attributes }} style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;">
+        <div class="custom-about-centered" {{ block.shopify_attributes }} style="--desktop-padding-top: {{ block.settings.padding_top }}px; --desktop-padding-bottom: {{ block.settings.padding_bottom }}px; --mobile-padding-top: {{ block.settings.padding_top_mobile | default: 60 }}px; --mobile-padding-bottom: {{ block.settings.padding_bottom_mobile | default: 60 }}px;">
           <div class="custom-about-container">
             <div class="custom-about-centered__wrapper">
               {% if block.settings.heading != blank %}
@@ -223,7 +223,8 @@
 
 /* Centered Text */
 .custom-about-centered {
-  padding: 100px 0;
+  padding-top: var(--desktop-padding-top, 100px);
+  padding-bottom: var(--desktop-padding-bottom, 100px);
 }
 .custom-about-centered__wrapper {
   max-width: 800px;
@@ -369,9 +370,10 @@
   }
   .custom-about-centered {
     margin: 0;
-    padding: 00px 30px;
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding-top: var(--mobile-padding-top, 0px);
+    padding-bottom: var(--mobile-padding-bottom, 0px);
+    padding-left: 30px;
+    padding-right: 30px;
   }
   .custom-about-centered__wrapper {
     text-align: center;
@@ -462,6 +464,10 @@
     color: #000;
     margin-top: 0;
     margin-bottom: 20px;
+    text-align: left !important;
+  }
+  .custom-about-centered__text p.center-text-mobile,
+  .custom-about-centered__text p:nth-of-type(2) {
     text-align: center !important;
   }
 }
@@ -629,6 +635,26 @@
           "unit": "px",
           "label": "Bottom Padding",
           "default": 100
+        },
+        {
+          "type": "range",
+          "id": "padding_top_mobile",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Top Padding (Mobile)",
+          "default": 60
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom_mobile",
+          "min": 0,
+          "max": 150,
+          "step": 5,
+          "unit": "px",
+          "label": "Bottom Padding (Mobile)",
+          "default": 60
         }
       ]
     },
